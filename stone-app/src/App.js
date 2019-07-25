@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { db } from './firebaseconfig';
 import Table from "./components/table"
 import List from './components/viewdata';
+import Example from './components/modal';
+import Bottom from './components/fixedDiv';
 class Form extends React.Component {
   constructor() {
     super()
@@ -10,6 +12,10 @@ class Form extends React.Component {
       enteries: [],
       getdata: null,
       dataList: null,
+      getDataKeys: null,
+      modal: false,
+      enterynumber: '',
+      data: null
     }
   }
   totalprice = () => {
@@ -24,10 +30,12 @@ class Form extends React.Component {
     var stone = document.getElementById('stone').value;
     var weigth1 = document.getElementById('weigth').value;
     var weigth = weigth1 + document.getElementById('karat').innerHTML
-    // var quantity = document.getElementById('quantity').value;
     var karatprice = document.getElementById('karatprice').value;
     var Totalprice = document.getElementById('Totalprice').value;
+    var date = new Date()
+    var newDate = `${date.getFullYear()}${date.getDate()}${date.getMonth() + 1}${date.getMilliseconds()}`;
     var obj = {
+      date: newDate,
       shopname: shopname,
       stone: stone,
       weigth: weigth,
@@ -40,7 +48,7 @@ class Form extends React.Component {
       enteries: enteries
     })
     console.log(enteries)
-    db.ref().child('data').child(shopname).child('data').set(obj)
+    db.ref().child('data').child(shopname).child(newDate).set(obj)
     document.getElementById('shopname').value = ""
     document.getElementById('stone').value = ""
     document.getElementById('weigth').value = ""
@@ -58,17 +66,18 @@ class Form extends React.Component {
       this.setState({
         dataList: dataList
       })
+      console.log(dataList)
     })
-    console.log(this.state.dataList)
-
   }
   data = (ev) => {
     document.getElementById('table').style.display = 'inline-block'
     document.getElementById('form').style.display = 'none'
     db.ref().child('data').on('value', (snap) => {
+      var getDataKeys = Object.keys(snap.val())
       var getData = Object.values(snap.val())
       this.setState({
-        getdata: getData
+        getdata: getData,
+        getDataKeys: getDataKeys
       })
     })
   }
@@ -81,20 +90,59 @@ class Form extends React.Component {
     document.getElementById('table').style.display = 'inline-block'
 
   }
+  handleClose = () => {
+    // const setShow = useState(false);
+    // setShow(false);
+    this.setState({
+      modal: false
+    })
+  }
+  handleShow = (ev) => {
+    // data = () => {
+    db.ref().child('data').on('value', (snap) => {
+      var wholedata = Object.values(snap.val())
+      var obj;
+
+      for (var i = 0; i < wholedata.length; i++) {
+        // console.log(Object.values(wholedata[i]))
+        obj = Object.values(wholedata[i]);
+        for (var j = 0; j < obj.length; j++) {
+          if (obj[j].date === ev.target.name) {
+            this.setState({
+              data: obj[j]
+            })
+          }
+        }
+      }
+
+
+      // if (obj) {
+      // }
+    })
+    // }
+    this.setState({
+      enterynumber: ev.target.name
+    })
+    // const setShow = useState(false);
+    // setShow(true);
+    this.setState({
+      modal: true,
+    })
+  }
   render() {
     return (
       <div>
         <div className="Form" id="form">
           <h1>Submit Form</h1>
           <div className="input-group mb-3 select" >
-            <div className="input-group-prepend">
-              <span className="input-group-text" >Shop Name</span>
+            <div className="input-group-prepend ">
+              <span className="input-group-text select1" >Shop Name</span>
             </div>
             <input type="text" className="form-control" id="shopname" />
           </div>
           <div className="input-group mb-3 select">
             <div className="input-group-prepend">
-              <label className="input-group-text" >stones</label>
+              <label className="input-group-text select1" >stones</label>
             </div>
             <select className="custom-select" id="stone">
               <option>Choose...</option>
@@ -106,7 +154,7 @@ class Form extends React.Component {
           </div>
           <div className="input-group mb-3 select" >
             <div className="input-group-prepend">
-              <span className="input-group-text" >Weigth</span>
+              <span className="input-group-text select1" >Weigth</span>
             </div>
             <input type="text" className="form-control" id="weigth" onChange={this.totalprice} />
             <span className="input-group-text" id="karat">CT</span>
@@ -114,19 +162,21 @@ class Form extends React.Component {
           </div>
           <div className="input-group mb-3 select" >
             <div className="input-group-prepend">
-              <span className="input-group-text" >per CT price</span>
+              <span className="input-group-text select1" >per CT price</span>
             </div>
             <input type="text" className="form-control" id="karatprice" onChange={this.totalprice} />
           </div>
           <div className="input-group mb-3 select" >
             <div className="input-group-prepend">
-              <span className="input-group-text" >Total price</span>
+              <span className="input-group-text select1" >Total price</span>
             </div>
             <input type="text" className="form-control" id="Totalprice" disabled />
           </div>
           <div className="input-group mb-3 select" >
-
             <button type="button" className="btn btn-secondary" id="submit" onClick={this.submit}>submit</button>
+          </div>
+          <div className="input-group mb-3 select" >
+
             <button type="button" className="btn btn-secondary" id="customer" onClick={this.data}>Customers</button>
           </div>
         </div>
@@ -140,9 +190,8 @@ class Form extends React.Component {
               </tr>
             </thead>
             <tbody id="tbody">
-              {this.state.getdata ?
-                this.state.getdata.map((values, index) => {
-                  console.log(this.state.getdata)
+              {this.state.getDataKeys ?
+                this.state.getDataKeys.map((values, index) => {
                   return <Table
                     key={index}
                     value={values}
@@ -160,29 +209,39 @@ class Form extends React.Component {
           <table className="table">
             <thead className="thead-light">
               <tr>
-                <th scope="col">#</th>
+                {/* <th scope="col">#</th> */}
+                <th scope="col">Recipt no</th>
                 <th scope="col">stone</th>
                 <th scope="col">Weigth</th>
                 <th scope="col">Per ct rate</th>
                 <th scope="col">Total price</th>
-                <th scope="col"><button type="button" className="btn btn-dark" onClick = {this.tablechange}>Back</button></th>
+                <th scope="col"><button type="button" className="btn btn-dark" onClick={this.tablechange}>Back</button></th>
               </tr>
             </thead>
             <tbody>
-            {this.state.dataList ?
+              {this.state.dataList ?
                 this.state.dataList.map((values, index) => {
-                  console.log(values)
                   return <List
                     key={index}
                     value={values}
                     index={index}
-                    viewlist={this.viewList}
+                    handleShow={this.handleShow}
                   />
 
                 }) : null
               }
             </tbody>
           </table>
+          <Example
+            data={this.state.data}
+            enterynumber={this.state.enterynumber}
+            show={this.state.modal}
+            handleShow={this.handleShow}
+            handleClose={this.handleClose}
+          />
+          <Bottom
+          datalist = {this.state.dataList}
+          />
         </div>
       </div >
     );
