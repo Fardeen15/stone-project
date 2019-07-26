@@ -7,7 +7,9 @@ class Table extends React.Component {
             < tr >
                 <td>{this.props.index + 1}</td>
                 <td>{this.props.value}</td>
-                <td><button name = {this.props.value} type="button" onClick = {this.props.viewlist} className="btn btn-secondary">View list</button></td>
+                <td>
+                    <button name = {this.props.value} type="button" onClick = {this.props.viewlist} className="btn btn-secondary">View list</button>
+                </td>
             </tr >
 
         )

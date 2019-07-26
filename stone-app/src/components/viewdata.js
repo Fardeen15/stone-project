@@ -4,13 +4,10 @@ class List extends React.Component {
     constructor(props){
         super(props)
     }
-
-     
-
     render() {
         return (
             < tr >
-                {/* <td>{this.props.index + 1}</td> */}
+                <td>{this.props.index + 1}</td>
                 <td>{this.props.value.date}</td>
                 <td>{this.props.value.stone}</td>
                 <td>{this.props.value.weigth}</td>

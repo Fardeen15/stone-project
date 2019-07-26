@@ -1,18 +1,10 @@
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
-import React, { useState } from 'react';
+import React from 'react';
 function Example(props) {
-    // const [obj1,setobj1] = useState();
     console.log(props.data)
-
-    // const handleClose = () => setShow(false);
-    // const handleShow = () => setShow(true);
-
     return (
         <>
-            {/* <Button variant="primary" onClick={handleShow}>
-          Launch demo modal
-        </Button> */}
             {props.data ?
                 <Modal show={props.show} onHide={props.handleClose}>
                     <Modal.Header closeButton>

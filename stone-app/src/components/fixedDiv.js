@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from 'react-bootstrap/Button'
 class Bottom extends React.Component {
     constructor(props) {
         super(props)
@@ -9,18 +10,12 @@ class Bottom extends React.Component {
     totalprice = () => {
         var total = 0;
 
-        if(this.props.datalist ){
+        if (this.props.datalist) {
             this.props.datalist.map((value) => {
                 return total += Number(value.totalprice)
 
             })
         }
-        // if (total) {
-        //     console.log(total)
-        //     this.setState({
-        //         total: total
-        //     })
-        // }
         return total
 
     }
@@ -29,7 +24,10 @@ class Bottom extends React.Component {
         return (
 
             <div id="fixed">
-                <h1>Total : {this.totalprice()}</h1>
+                <h1 id="totaldiv">Total : {this.totalprice()}</h1>
+                <Button name = {this.totalprice()} variant="danger" onClick={(ev)=>{this.props.handleShow(ev)}}>
+                    receive payment
+                </Button>
             </div>
         )
     }
