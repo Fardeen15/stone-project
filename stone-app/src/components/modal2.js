@@ -11,19 +11,28 @@ class Example2 extends React.Component {
 
         }
     }
-    render() {
-        console.log(this.state)
+    total = ()=>{
+        var value1 = document.getElementById('totalprice').value
+        var value2 = document.getElementById('cashpayment').value
+        var balnce = value1 - value2
+        if (balnce >= 0) {
+            this.setState({
+                balance: balnce
+            })
+        }
 
+    }
+    render() {
         return (
             <>
                 <Modal show={this.props.show} onHide={this.props.handleClose}>
                     <Modal.Header closeButton>
-                        <Modal.Title>receive payment</Modal.Title>
+                        <Modal.Title>Receive Payment</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <InputGroup className="mb-3">
                             <InputGroup.Prepend>
-                                <InputGroup.Text id="inputGroup-sizing-default">total</InputGroup.Text>
+                                <InputGroup.Text id="inputGroup-sizing-default">Total</InputGroup.Text>
                             </InputGroup.Prepend>
                             <FormControl
                                 type="number"
@@ -36,7 +45,7 @@ class Example2 extends React.Component {
                         </InputGroup>
                         <InputGroup className="mb-3">
                             <InputGroup.Prepend>
-                                <InputGroup.Text id="inputGroup-sizing-default">cash payment</InputGroup.Text>
+                                <InputGroup.Text id="inputGroup-sizing-default">Cash payment</InputGroup.Text>
                             </InputGroup.Prepend>
                             <FormControl
                                 type="number"
@@ -44,23 +53,13 @@ class Example2 extends React.Component {
                                 aria-label="Default"
                                 aria-describedby="inputGroup-sizing-default"
                                 onChange={() => {
-                                    // this.props.totalprice?
-                                    var value1 = document.getElementById('totalprice').value
-                                    var value2 = document.getElementById('cashpayment').value
-                                    var balnce = value1 - value2
-                                    if (balnce) {
-
-                                        this.setState({
-                                            balance: balnce
-                                        })
-                                    }
-
+                                    this.total()
                                 }}
                             />
                         </InputGroup>
                         <InputGroup className="mb-3">
                             <InputGroup.Prepend>
-                                <InputGroup.Text id="inputGroup-sizing-default">BAlance</InputGroup.Text>
+                                <InputGroup.Text id="inputGroup-sizing-default">Balance</InputGroup.Text>
                             </InputGroup.Prepend>
                             <FormControl
                                 type="number"
@@ -82,11 +81,14 @@ class Example2 extends React.Component {
                             }>
                             Close
                         </Button>
-                        <Button variant="primary" onClick={()=>{
+                        <Button name = {this.state.balance} variant="primary" onClick={(ev)=>{
+                            this.props.balance(ev.target.name)
+                            console.log(ev.target.name)
                             this.setState({
                                 balance : null
                             })
-                            this.props.handleClose()}
+                            this.props.handleClose()
+                        }
                             }>
                             Save Changes
                         </Button>

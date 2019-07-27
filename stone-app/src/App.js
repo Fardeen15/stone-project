@@ -8,7 +8,7 @@ import Example2 from './components/modal2';
 import Bottom from './components/fixedDiv';
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
-
+import FormList from './components/formList'
 import Form1 from 'react-bootstrap/Form'
 class Form extends React.Component {
   constructor() {
@@ -22,7 +22,8 @@ class Form extends React.Component {
       modal2: false,
       enterynumber: '',
       data: null,
-      totalprice: null
+      totalprice: null,
+      value: null
     }
   }
   totalprice = () => {
@@ -66,7 +67,6 @@ class Form extends React.Component {
   viewList = (ev) => {
     document.getElementById('table1').style.display = 'inline-block'
     document.getElementById('table').style.display = 'none'
-
     var shopname = ev.target.name;
     db.ref().child('data').child(shopname).on('value', (snap) => {
       var dataList = Object.values(snap.val())
@@ -96,7 +96,6 @@ class Form extends React.Component {
   tablechange = () => {
     document.getElementById('table1').style.display = 'none'
     document.getElementById('table').style.display = 'inline-block'
-
   }
   handleClose = () => {
     // const setShow = useState(false);
@@ -178,57 +177,18 @@ class Form extends React.Component {
       getDataKeys: []
     })
   }
+  balance = (value) => {
+    this.setState({
+      value: value
+    })
+  }
+
+
+
   render() {
     return (
       <div>
-        <div className="Form" id="form">
-          <h1>Submit Form</h1>
-          <div className="input-group mb-3 select" >
-            <div className="input-group-prepend ">
-              <span className="input-group-text select1" >Shop Name</span>
-            </div>
-            <input type="text" className="form-control" id="shopname" />
-          </div>
-          <div className="input-group mb-3 select">
-            <div className="input-group-prepend">
-              <label className="input-group-text select1" >stones</label>
-            </div>
-            <select className="custom-select" id="stone">
-              <option>Choose...</option>
-              <option>وائٹ چیٹائی</option>
-              <option>یورو رنگ</option>
-              <option>کورین کول</option>
-              <option> یورو چیٹائی </option>
-            </select>
-          </div>
-          <div className="input-group mb-3 select" >
-            <div className="input-group-prepend">
-              <span className="input-group-text select1" >Weigth</span>
-            </div>
-            <input type="text" className="form-control" id="weigth" onChange={this.totalprice} />
-            <span className="input-group-text" id="karat">CT</span>
-
-          </div>
-          <div className="input-group mb-3 select" >
-            <div className="input-group-prepend">
-              <span className="input-group-text select1" >per CT price</span>
-            </div>
-            <input type="text" className="form-control" id="karatprice" onChange={this.totalprice} />
-          </div>
-          <div className="input-group mb-3 select" >
-            <div className="input-group-prepend">
-              <span className="input-group-text select1" >Total price</span>
-            </div>
-            <input type="text" className="form-control Totalprice" id="Totalprice" disabled />
-          </div>
-          <div className="input-group mb-3 select" >
-            <button type="button" className="btn btn-secondary" id="submit" onClick={this.submit}>submit</button>
-          </div>
-          <div className="input-group mb-3 select" >
-
-            <button type="button" className="btn btn-secondary" id="customer" onClick={this.data}>Customers</button>
-          </div>
-        </div>
+        <FormList totalprice={this.totalprice} sumbit={this.submit} data={this.data} />
         <div id="table">
           <div id="searchTr">
             <InputGroup className="mb-3">
@@ -310,10 +270,12 @@ class Form extends React.Component {
             handleClose={this.handleClose}
           />
           <Bottom
+            value={this.state.value}
             datalist={this.state.dataList}
             handleShow={this.handleShow2}
           />
           <Example2
+            balance={this.balance}
             show={this.state.modal2}
             handleShow={this.handleShow2}
             handleClose={this.handleClose2}

@@ -9,7 +9,6 @@ class Bottom extends React.Component {
     }
     totalprice = () => {
         var total = 0;
-
         if (this.props.datalist) {
             this.props.datalist.map((value) => {
                 return total += Number(value.totalprice)
@@ -22,10 +21,9 @@ class Bottom extends React.Component {
     render() {
 
         return (
-
             <div id="fixed">
-                <h1 id="totaldiv">Total : {this.totalprice()}</h1>
-                <Button name = {this.totalprice()} variant="danger" onClick={(ev)=>{this.props.handleShow(ev)}}>
+                <h1 id="totaldiv">Total : <span id="price">{this.totalprice()}</span></h1>
+                <Button name={this.totalprice()} variant="danger" onClick={(ev) => { this.props.handleShow(ev) }}>
                     receive payment
                 </Button>
             </div>
