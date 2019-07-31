@@ -23,9 +23,48 @@ class Form extends React.Component {
       enterynumber: '',
       data: null,
       totalprice: null,
-      value: null
+      value: null,
+      shopname: "",
+      data: null,
+      localgetDataKeys : "seeven star",
+      localGetData: [
+        {
+          201931782: {
+
+            date: "201931782",
+            perkarat: "800",
+            shopname: "seeven star",
+            stone: "یورو رنگ",
+            totalprice: "40000",
+            weigth: "50CT",
+          }
+        },
+        {
+
+          2019267597:{
+            date: "2019267597",
+            perkarat: "125",
+            shopname: "seeven star",
+            stone: "کورین کول",
+            totalprice: "750",
+            weigth: "6CT"
+          }
+        },{
+
+          2019317766:{
+            date: "2019317766",
+            perkarat: "800",
+            shopname: "seeven star",
+            stone: "یورو رنگ",
+            totalprice: "40000",
+            weigth: "50CT",
+          }
+        }
+      ]
     }
   }
+
+  sevenstar
   totalprice = () => {
     var weigth = document.getElementById('weigth').value;
     var karatprice = document.getElementById('karatprice').value;
@@ -71,22 +110,53 @@ class Form extends React.Component {
     db.ref().child('data').child(shopname).on('value', (snap) => {
       var dataList = Object.values(snap.val())
       this.setState({
-        dataList: dataList
+        dataList: dataList,
+        shopname: shopname
       })
-      console.log(dataList)
+      var total = 0;
+      dataList.map((value) => {
+        return total += Number(value.totalprice)
+
+      })
+
+      if (total >= 0) {
+        var obj = {
+          total: total,
+        }
+      }
+      var fulldate = new Date()
+      var date = fulldate.getDate();
+      var month = fulldate.getMonth() + 1;
+      var year = fulldate.getFullYear();
+      console.log(date, month, year)
+      var merge = `${date}${month}${year}`
+
+      db.ref().child('payment').child(shopname).child(merge).set(obj)
+      console.log(total)
     })
   }
+
   data = (ev) => {
     document.getElementById('table').style.display = 'inline-block'
     document.getElementById('form').style.display = 'none'
     db.ref().child('data').on('value', (snap) => {
-      var getDataKeys = Object.keys(snap.val())
-      var getData = Object.values(snap.val())
-      this.setState({
-        getdata: getData,
-        getDataKeys: getDataKeys,
-        getDataKeys2: getDataKeys
-      })
+      if (snap.val()) {
+        var getDataKeys = Object.keys(snap.val())
+        var getData = Object.values(snap.val())
+        this.setState({
+          getdata: getData,
+          getDataKeys: getDataKeys,
+          getDataKeys2: getDataKeys
+        })
+        console.log(getData);
+        console.log(getDataKeys)
+      } else {
+        this.setState({
+          getdata: this.state.localData,
+          getDataKeys: this.state.localData,
+          // getDataKeys2: getDataKeys
+        })
+      }
     })
   }
   back = () => {
@@ -94,6 +164,9 @@ class Form extends React.Component {
     document.getElementById('form').style.display = 'inline-block'
   }
   tablechange = () => {
+    this.setState({
+      data: null
+    })
     document.getElementById('table1').style.display = 'none'
     document.getElementById('table').style.display = 'inline-block'
   }
@@ -181,6 +254,18 @@ class Form extends React.Component {
     this.setState({
       value: value
     })
+  }
+  value = () => {
+    db.ref().child('payment').child(this.state.shopname).on('value', (snap) => {
+      var data = Object.values(snap.val());
+      console.log(data)
+      this.setState({
+        data: data
+      }, () => {
+        console.log(this.state.data)
+      })
+    })
+
   }
 
 
@@ -272,7 +357,9 @@ class Form extends React.Component {
           <Bottom
             value={this.state.value}
             datalist={this.state.dataList}
+            data={this.state.data}
             handleShow={this.handleShow2}
+            shopname={this.state.shopname}
           />
           <Example2
             balance={this.balance}
@@ -280,6 +367,8 @@ class Form extends React.Component {
             handleShow={this.handleShow2}
             handleClose={this.handleClose2}
             totalprice={this.state.totalprice}
+            shopname={this.state.shopname}
+            value={this.value}
           />
         </div>
       </div >
