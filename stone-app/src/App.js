@@ -3,13 +3,13 @@ import './App.css';
 import { db } from './firebaseconfig';
 import Table from "./components/table"
 import List from './components/viewdata';
-import Example from './components/modal';
 import Example2 from './components/modal2';
 import Bottom from './components/fixedDiv';
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import FormList from './components/formList'
 import Form1 from 'react-bootstrap/Form'
+import Example from './components/modal1';
 class Form extends React.Component {
   constructor() {
     super()
@@ -26,7 +26,7 @@ class Form extends React.Component {
       value: null,
       shopname: "",
       data: null,
-      localgetDataKeys : "seeven star",
+      localgetDataKeys: "seeven star",
       localGetData: [
         {
           201931782: {
@@ -41,7 +41,7 @@ class Form extends React.Component {
         },
         {
 
-          2019267597:{
+          2019267597: {
             date: "2019267597",
             perkarat: "125",
             shopname: "seeven star",
@@ -49,9 +49,9 @@ class Form extends React.Component {
             totalprice: "750",
             weigth: "6CT"
           }
-        },{
+        }, {
 
-          2019317766:{
+          2019317766: {
             date: "2019317766",
             perkarat: "800",
             shopname: "seeven star",
@@ -79,8 +79,24 @@ class Form extends React.Component {
     var weigth = weigth1 + document.getElementById('karat').innerHTML
     var karatprice = document.getElementById('karatprice').value;
     var Totalprice = document.getElementById('Totalprice').value;
-    var date = new Date()
-    var newDate = `${date.getFullYear()}${date.getDate()}${date.getMonth() + 1}${date.getMilliseconds()}`;
+    var fulldate = new Date()
+    var date = fulldate.getDate();
+    if (date <= 9) {
+      date = "0" + fulldate.getDate()
+    } else {
+      date = fulldate.getDate()
+    }
+    var month = fulldate.getMonth() + 1;
+    if (month <= 9) {
+      month = `0${fulldate.getMonth()+1}`
+    } else {
+      var month = fulldate.getMonth() + 1;
+    }
+
+    var year = fulldate.getFullYear();
+    var miliscnd = fulldate.getMilliseconds();
+    console.log(date, month, year)
+    var newDate = `${date}${month}${year}${miliscnd}`
     var obj = {
       date: newDate,
       shopname: shopname,
@@ -114,10 +130,13 @@ class Form extends React.Component {
         shopname: shopname
       })
       var total = 0;
-      dataList.map((value) => {
-        return total += Number(value.totalprice)
+      // if(dataList.totalprice){
 
+      dataList.map((value) => {
+
+        return value.totalprice ? total += Number(value.totalprice) : null
       })
+      // }
 
       if (total >= 0) {
         var obj = {
@@ -126,11 +145,21 @@ class Form extends React.Component {
       }
       var fulldate = new Date()
       var date = fulldate.getDate();
-      var month = fulldate.getMonth() + 1;
-      var year = fulldate.getFullYear();
-      console.log(date, month, year)
-      var merge = `${date}${month}${year}`
+      if (date <= 9) {
+        date = "0" + fulldate.getDate()
+      } else {
+        date = fulldate.getDate()
+      }
 
+      var month = fulldate.getMonth() + 1;
+      if (month <= 9) {
+        month = `0${fulldate.getMonth()+1}`
+      } else {
+        var month = fulldate.getMonth() + 1;
+      }
+
+      var year = fulldate.getFullYear();
+      var merge = `${date}${month}${year}`
       db.ref().child('payment').child(shopname).child(merge).set(obj)
       console.log(total)
     })
@@ -185,26 +214,6 @@ class Form extends React.Component {
     })
   }
   handleShow = (ev) => {
-    db.ref().child('data').on('value', (snap) => {
-      var wholedata = Object.values(snap.val())
-      var obj;
-
-      for (var i = 0; i < wholedata.length; i++) {
-        obj = Object.values(wholedata[i]);
-        for (var j = 0; j < obj.length; j++) {
-          if (obj[j].date === ev.target.name) {
-            this.setState({
-              data: obj[j]
-            })
-          }
-        }
-      }
-
-
-    })
-    this.setState({
-      enterynumber: ev.target.name
-    })
     this.setState({
       modal: true,
     })
@@ -256,24 +265,23 @@ class Form extends React.Component {
     })
   }
   value = () => {
+
+
     db.ref().child('payment').child(this.state.shopname).on('value', (snap) => {
-      var data = Object.values(snap.val());
+      var data = snap.val();
       console.log(data)
-      this.setState({
-        data: data
-      }, () => {
-        console.log(this.state.data)
-      })
+      // this.setState({
+      //   data: data
+      // })
     })
 
   }
 
 
-
   render() {
     return (
       <div>
-        <FormList totalprice={this.totalprice} sumbit={this.submit} data={this.data} />
+        <FormList totalprice={this.totalprice} sumbit={this.submit} data={this.data} handleShow={this.handleShow} />
         <div id="table">
           <div id="searchTr">
             <InputGroup className="mb-3">
@@ -340,6 +348,7 @@ class Form extends React.Component {
                     key={index}
                     value={values}
                     index={index}
+                    total={this.value}
                     handleShow={this.handleShow}
                   />
 
@@ -348,8 +357,6 @@ class Form extends React.Component {
             </tbody>
           </table>
           <Example
-            data={this.state.data}
-            enterynumber={this.state.enterynumber}
             show={this.state.modal}
             handleShow={this.handleShow}
             handleClose={this.handleClose}

@@ -26,23 +26,63 @@ class Example2 extends React.Component {
     date = () => {
         var fulldate = new Date()
         var date = fulldate.getDate();
+        if(date <= 9){
+            date = "0"+ fulldate.getDate()
+        }else{
+            date = fulldate.getDate()
+        }
         var month = fulldate.getMonth() + 1;
+        if(month <= 9){
+            month = `0${fulldate.getMonth()+1}`
+        }else{
+            var month = fulldate.getMonth() + 1;
+        }
+
         var year = fulldate.getFullYear();
         console.log(date, month, year)
         var merge = `${date}${month}${year}`
         return merge
     }
-    price = () =>{
+
+    date2 = () => {
+        var fulldate = new Date()
+        var date = fulldate.getDate();
+        if(date <= 9){
+            date = "0"+ fulldate.getDate()
+        }else{
+            date = fulldate.getDate()
+        }
+        var month = fulldate.getMonth() + 1;
+        if(month <= 9){
+            month = `0${fulldate.getMonth()+1}`
+        }else{
+            var month = fulldate.getMonth() + 1;
+        }
+
+        var year = fulldate.getFullYear();
+        var miliscnd = fulldate.getMilliseconds();
+        console.log(date, month, year)
+        var merge = `${date}${month}${year}${miliscnd}`
+        return merge
+    }
+
+    price = () => {
         var date = document.getElementById('dateInp').value;
         var total = document.getElementById('totalprice').value;
         var cashpayment = document.getElementById('cashpayment').value;
         var obj = {
-            date : date, 
-            total : total,
-            receivepayment : cashpayment,
-            balance : this.state.balance,
+            date: date,
+            total: total,
+            totalprice: -cashpayment,
+            balance: this.state.balance,
         }
         return obj
+    }
+    innerhtml = () => {
+        document.getElementById('dateInp').value = ""
+        document.getElementById('totalprice').value = ""
+        document.getElementById('cashpayment').value = ""
+        document.getElementById('balance').value = ""
     }
     render() {
         return (
@@ -113,14 +153,21 @@ class Example2 extends React.Component {
                                 balance: null
                             })
                             this.props.handleClose()
+                            this.innerhtml()
                         }
                         }>
                             Close
                         </Button>
                         <Button name={this.state.balance} variant="primary" onClick={(ev) => {
+                            db.ref().child('data').child(this.props.shopname).child(this.date2()).set(this.price())
                             db.ref().child('payment').child(this.props.shopname).child(this.date()).set(this.price())
-                            this.props.handleClose()
+                            this.setState({
+                                balance: null
+                            })
+
                             this.props.value()
+                            this.innerhtml()
+                            this.props.handleClose()
                         }
                         }>
                             Save Changes
