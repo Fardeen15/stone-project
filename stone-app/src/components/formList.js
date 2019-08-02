@@ -5,7 +5,8 @@ class FormList extends React.Component {
   constructor() {
     super()
     this.state = {
-      data: null
+      data: null,
+      stone: null
     }
   }
   data = () => {
@@ -19,8 +20,22 @@ class FormList extends React.Component {
       }
     })
   }
+  stone = () => {
+    db.ref().child("stones").on('value', (snap) => {
+      if (snap.val()) {
+
+        var data = Object.keys(snap.val())
+        this.setState({
+          stone: data
+        },()=>{
+          console.log(this.state.stone)
+        })
+      }
+    })
+  }
   componentWillMount() {
     this.data()
+    this.stone()
   }
   render() {
     return (
@@ -48,11 +63,18 @@ class FormList extends React.Component {
           </div>
           <select className="custom-select" id="stone">
             <option>Choose...</option>
+            {this.state.stone ?
+              this.state.stone.map((value, index) => {
+                return <option key = {index}>{value}</option>
+              }) : null
+            }
             <option>وائٹ چیٹائی</option>
             <option>یورو رنگ</option>
             <option>کورین کول</option>
             <option> یورو چیٹائی </option>
           </select>
+          <span className="input-group-text" id="name" onClick={() => this.props.handleShow2()}><i className="fas fa-plus addicon" ></i></span>
+
         </div>
         <div className="input-group mb-3 select" >
           <div className="input-group-prepend">

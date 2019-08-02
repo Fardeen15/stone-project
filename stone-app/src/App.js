@@ -10,6 +10,7 @@ import FormControl from 'react-bootstrap/FormControl'
 import FormList from './components/formList'
 import Form1 from 'react-bootstrap/Form'
 import Example from './components/modal1';
+import Example3 from './components/modal3';
 class Form extends React.Component {
   constructor() {
     super()
@@ -88,7 +89,7 @@ class Form extends React.Component {
     }
     var month = fulldate.getMonth() + 1;
     if (month <= 9) {
-      month = `0${fulldate.getMonth()+1}`
+      month = `0${fulldate.getMonth() + 1}`
     } else {
       var month = fulldate.getMonth() + 1;
     }
@@ -124,19 +125,21 @@ class Form extends React.Component {
     document.getElementById('table').style.display = 'none'
     var shopname = ev.target.name;
     db.ref().child('data').child(shopname).on('value', (snap) => {
-      var dataList = Object.values(snap.val())
+      if (snap.val()) {
+        var dataList = Object.values(snap.val())
+      }
       this.setState({
         dataList: dataList,
         shopname: shopname
       })
       var total = 0;
-      // if(dataList.totalprice){
+      if(dataList){
 
       dataList.map((value) => {
 
         return value.totalprice ? total += Number(value.totalprice) : null
       })
-      // }
+      }
 
       if (total >= 0) {
         var obj = {
@@ -153,7 +156,7 @@ class Form extends React.Component {
 
       var month = fulldate.getMonth() + 1;
       if (month <= 9) {
-        month = `0${fulldate.getMonth()+1}`
+        month = `0${fulldate.getMonth() + 1}`
       } else {
         var month = fulldate.getMonth() + 1;
       }
@@ -206,6 +209,13 @@ class Form extends React.Component {
       modal: false
     })
   }
+  handleClose3 = () => {
+    // const setShow = useState(false);
+    // setShow(false);
+    this.setState({
+      modal: false
+    })
+  }
   handleClose2 = () => {
     // const setShow = useState(false);
     // setShow(false);
@@ -214,6 +224,11 @@ class Form extends React.Component {
     })
   }
   handleShow = (ev) => {
+    this.setState({
+      modal: true,
+    })
+  }
+  handleShow3 = (ev) => {
     this.setState({
       modal: true,
     })
@@ -231,8 +246,6 @@ class Form extends React.Component {
     })
     var value = ev.target.value
     setTimeout(() => {
-      // if (value) {
-
       var name = this.state.getDataKeys2;
       var state = this.state.getDataKeys;
       // console.log(ev.target.value)
@@ -247,8 +260,7 @@ class Form extends React.Component {
         getDataKeys: state
       })
       console.log(result)
-      // }
-    }, 300)
+    }, 50)
   }
 
   search = () => {
@@ -281,7 +293,7 @@ class Form extends React.Component {
   render() {
     return (
       <div>
-        <FormList totalprice={this.totalprice} sumbit={this.submit} data={this.data} handleShow={this.handleShow} />
+        <FormList totalprice={this.totalprice} sumbit={this.submit} data={this.data} handleShow={this.handleShow} handleShow2={this.handleShow3} />
         <div id="table">
           <div id="searchTr">
             <InputGroup className="mb-3">
@@ -360,6 +372,11 @@ class Form extends React.Component {
             show={this.state.modal}
             handleShow={this.handleShow}
             handleClose={this.handleClose}
+          />
+          <Example3
+            show={this.state.modal}
+            handleShow={this.handleShow3}
+            handleClose={this.handleClose3}
           />
           <Bottom
             value={this.state.value}

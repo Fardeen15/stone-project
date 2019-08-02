@@ -8,24 +8,12 @@ class Bottom extends React.Component {
         this.state = {
             total: [],
             data: null,
+            balance: [],
+            values: null
         }
     }
 
     totalprice = () => {
-        // if(this.props.shopname){
-        //     db.ref().child("payment").child(this.props.shopname).on('value',(snap)=>{
-        //         // console.log(snap.val())
-        //        var data =  Object.values(snap.val())
-        //        for (var i = 0 ; i < data.length; i++){
-        //            if(data[i].balance){
-        //                this.setState({
-        //                    total : data[i].balance
-        //                })
-        //            }
-        //        }
-        //     })
-        //     console.log(this.state.total)
-        // }else{
 
         var total = 0;
         if (this.props.datalist) {
@@ -35,9 +23,30 @@ class Bottom extends React.Component {
             })
         }
         return total
-        // }
 
     }
+    date2 = () => {
+        var fulldate = new Date()
+        var date = fulldate.getDate();
+        if (date <= 9) {
+            date = "0" + fulldate.getDate()
+        } else {
+            date = fulldate.getDate()
+        }
+        var month = fulldate.getMonth() + 1;
+        if (month <= 9) {
+            month = `0${fulldate.getMonth() + 1}`
+        } else {
+            var month = fulldate.getMonth() + 1;
+        }
+
+        var year = fulldate.getFullYear();
+        var miliscnd = fulldate.getMilliseconds();
+        console.log(date, month, year)
+        var merge = `${date}${month}${year}${miliscnd}`
+        return merge
+    }
+
     date = () => {
         var fulldate = new Date()
         var date = fulldate.getDate();
@@ -57,6 +66,39 @@ class Bottom extends React.Component {
         var merge = `${date}${month}${year}`
         return merge
     }
+
+    khataClose = (ev) => {
+        var name = ev.target.name;
+        if (this.totalprice() >= 0) {
+            var obj = {
+                balance: {
+                    totalprice: this.totalprice(),
+                    date: this.date()
+                }
+            }
+            console.log(obj)
+
+            db.ref().child('khataBalance').child(name).set(obj)
+        }
+        // this.setState({
+        //     balance: obj
+        // }, () => {
+        //     db.ref().child('data').child(name).on('value', (snap) => {
+        //         if (snap.val()) {
+
+        //             var data = Object.values(snap.val())
+        //             data.push(obj)
+        //             this.setState({
+        //                 values: data
+        //             })
+        //         }
+        //     })
+        //     document.getElementById('table1').style.display = 'none'
+        //     document.getElementById('table').style.display = 'inline-block'
+        //     console.log(this.state.values)
+        //     db.ref().child('data').child(name).remove()
+        // })
+    }
     render() {
         return (
             <div id="fixed">
@@ -65,19 +107,26 @@ class Bottom extends React.Component {
                         <tr>
                             <th>Date</th>
                             <th>balance</th>
-                            <th><Button name={this.totalprice()} variant="danger" onClick={(ev) => { this.props.handleShow(ev) }}>
-                                receive payment
-                </Button></th>
+                            <th>
+                                <Button name={this.totalprice()} variant="danger" onClick={(ev) => { this.props.handleShow(ev) }}>
+                                    receive payment
+                                </Button>
+                            </th>
+                            <th>
+                                <Button name={this.props.shopname} variant="danger" onClick={(ev) => { this.khataClose(ev) }}>
+                                    KAHTA # 1
+                                </Button>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         {this.props.data ?
                             this.props.data.map((value, index) => {
-                                    return (<tr key={index}>
-                                        <td className="classestd">{value.date}</td>
-                                        <td className="classestd">{value.total}</td>
-                                        <td className="classestd"></td>
-                                    </tr>)
+                                return (<tr key={index}>
+                                    <td className="classestd">{value.date}</td>
+                                    <td className="classestd">{value.total}</td>
+                                    <td className="classestd"></td>
+                                </tr>)
                             })
                             :
                             <tr>
