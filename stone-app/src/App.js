@@ -21,12 +21,15 @@ class Form extends React.Component {
       getDataKeys: null,
       modal: false,
       modal2: false,
+      modal3: false,
       enterynumber: '',
       data: null,
       totalprice: null,
       value: null,
       shopname: "",
       data: null,
+      baldata: null,
+      prebal: [],
       localgetDataKeys: "seeven star",
       localGetData: [
         {
@@ -127,25 +130,26 @@ class Form extends React.Component {
     db.ref().child('data').child(shopname).on('value', (snap) => {
       if (snap.val()) {
         var dataList = Object.values(snap.val())
+        console.log(dataList)
       }
       this.setState({
         dataList: dataList,
         shopname: shopname
       })
       var total = 0;
-      if(dataList){
+      if (dataList) {
 
-      dataList.map((value) => {
+        dataList.map((value) => {
 
-        return value.totalprice ? total += Number(value.totalprice) : null
-      })
+          return value.totalprice ? total += Number(value.totalprice) : null
+        })
       }
 
-      if (total >= 0) {
+      // if (total) {
         var obj = {
           total: total,
         }
-      }
+      // }
       var fulldate = new Date()
       var date = fulldate.getDate();
       if (date <= 9) {
@@ -160,9 +164,9 @@ class Form extends React.Component {
       } else {
         var month = fulldate.getMonth() + 1;
       }
-
+      var miliscnd = fulldate.getMilliseconds();
       var year = fulldate.getFullYear();
-      var merge = `${date}${month}${year}`
+      var merge = `${date}${month}${year}${miliscnd}`
       db.ref().child('payment').child(shopname).child(merge).set(obj)
       console.log(total)
     })
@@ -210,15 +214,11 @@ class Form extends React.Component {
     })
   }
   handleClose3 = () => {
-    // const setShow = useState(false);
-    // setShow(false);
     this.setState({
-      modal: false
+      modal3: false
     })
   }
   handleClose2 = () => {
-    // const setShow = useState(false);
-    // setShow(false);
     this.setState({
       modal2: false
     })
@@ -230,7 +230,7 @@ class Form extends React.Component {
   }
   handleShow3 = (ev) => {
     this.setState({
-      modal: true,
+      modal3: true,
     })
   }
   handleShow2 = (ev) => {
@@ -288,6 +288,41 @@ class Form extends React.Component {
     })
 
   }
+  data2 = (ev) => {
+    var name = ev.target.name
+    if (ev.target.name) {
+      db.ref().child('khataBalance').child(ev.target.name).on('value', (snap) => {
+        if (snap.val()) {
+          var value = Object.values(snap.val());
+          console.log(value)
+          this.setState({
+            baldata: value
+          })
+        }
+        db.ref().child('khataBalance').on('value', (snap) => {
+          var prebal = this.state.prebal
+          var dataList = this.state.dataList
+          if (snap.val()) {
+
+            var data = Object.keys(snap.val())
+            for (var i = 0; i < data.length; i++) {
+              if (data[i] === name && this.state.baldata) {
+                prebal.push(this.state.baldata[0])
+                dataList.push(this.state.baldata[0])
+              }
+            }
+          }
+          if (prebal.length) {
+
+            this.setState({
+              prebal,
+              dataList,
+            })
+          }
+        })
+      })
+    }
+  }
 
 
   render() {
@@ -327,6 +362,7 @@ class Form extends React.Component {
                     value={values}
                     index={index}
                     viewlist={this.viewList}
+                    data={this.data2}
                   />
 
                 }) : null
@@ -354,12 +390,22 @@ class Form extends React.Component {
               </tr>
             </thead>
             <tbody>
+              {/* {this.state.prebal.length ?
+                this.state.prebal.map((value, index) => {
+                  return (
+                    <tr key = {index}>
+                      <td>{value.totalprice}</td>
+                    </tr>
+                  )
+                })
+                : null} */}
               {this.state.dataList ?
                 this.state.dataList.map((values, index) => {
                   return <List
                     key={index}
                     value={values}
                     index={index}
+                    data={this.state.baldata ? this.props.baldata : null}
                     total={this.value}
                     handleShow={this.handleShow}
                   />
@@ -374,7 +420,7 @@ class Form extends React.Component {
             handleClose={this.handleClose}
           />
           <Example3
-            show={this.state.modal}
+            show={this.state.modal3}
             handleShow={this.handleShow3}
             handleClose={this.handleClose3}
           />

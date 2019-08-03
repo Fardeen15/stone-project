@@ -78,26 +78,30 @@ class Bottom extends React.Component {
             }
             console.log(obj)
 
-            db.ref().child('khataBalance').child(name).set(obj)
-        }
-        // this.setState({
-        //     balance: obj
-        // }, () => {
-        //     db.ref().child('data').child(name).on('value', (snap) => {
-        //         if (snap.val()) {
+            db.ref().child('khataBalance').child(name).set(obj).then(() => {
+                this.setState({
+                    balance: obj
+                }, () => {
+                    db.ref().child('data').child(name).on('value', (snap) => {
+                        if (snap.val()) {
 
-        //             var data = Object.values(snap.val())
-        //             data.push(obj)
-        //             this.setState({
-        //                 values: data
-        //             })
-        //         }
-        //     })
-        //     document.getElementById('table1').style.display = 'none'
-        //     document.getElementById('table').style.display = 'inline-block'
-        //     console.log(this.state.values)
-        //     db.ref().child('data').child(name).remove()
-        // })
+                            var data = Object.values(snap.val())
+                            this.setState({
+                                values: data
+                            })
+                        }
+                    })
+                    db.ref().child('khata').child(name).child(this.date2()).set(this.state.values).then(() => {
+
+                        document.getElementById('table1').style.display = 'none'
+                        document.getElementById('table').style.display = 'inline-block'
+                        console.log()
+                        db.ref().child('data').child(name).remove()
+                    })
+                })
+
+            })
+        }
     }
     render() {
         return (

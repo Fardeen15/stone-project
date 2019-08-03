@@ -1,10 +1,14 @@
-// import { db } from './firebaseconfig';
+import { db } from '../firebaseconfig';
 import React from 'react';
 
 class Table extends React.Component {
     constructor(props){
         super(props)
+        this.state = {
+            data : null
+        }
     }
+
     render() {
         return (
             < tr >
@@ -13,6 +17,7 @@ class Table extends React.Component {
                 <td>
                     <button name={this.props.value} type="button" onClick={(ev) => {
                         this.props.viewlist(ev)
+                        this.props.data(ev)
                     }} className="btn btn-secondary">View list</button>
                 </td>
             </tr >
