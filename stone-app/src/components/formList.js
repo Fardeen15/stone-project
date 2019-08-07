@@ -43,7 +43,7 @@ class FormList extends React.Component {
         <h1>Submit Form</h1>
         <div className="input-group mb-3 select" >
           <div className="input-group-prepend ">
-            <span className="input-group-text select1" >Shop Name</span>
+            <span className="input-group-text select1 font" >Shop Name</span>
           </div>
           <input type="text" list="Sname" className="form-control" id="shopname" />
           <datalist id="Sname">
@@ -53,13 +53,13 @@ class FormList extends React.Component {
               }) : null
             }
           </datalist>
-          <span className="input-group-text" id="name" onClick={() => this.props.handleShow()}><i className="fas fa-plus addicon" ></i></span>
+          <span className="input-group-text" id="name" onClick={() => this.props.handleShow()}><i className="fas fa-plus addicon2" ></i></span>
 
         </div>
 
         <div className="input-group mb-3 select">
           <div className="input-group-prepend">
-            <label className="input-group-text select1" >stones</label>
+            <label className="input-group-text select1 " >stones</label>
           </div>
           <select className="custom-select" id="stone">
             <option>Choose...</option>
@@ -73,7 +73,7 @@ class FormList extends React.Component {
             <option>کورین کول</option>
             <option> یورو چیٹائی </option>
           </select>
-          <span className="input-group-text" id="name" onClick={() => this.props.handleShow2()}><i className="fas fa-plus addicon" ></i></span>
+          <span className="input-group-text" id="name" onClick={() => this.props.handleShow2()}><i className="fas fa-plus addicon2" ></i></span>
 
         </div>
         <div className="input-group mb-3 select" >
@@ -86,7 +86,7 @@ class FormList extends React.Component {
         </div>
         <div className="input-group mb-3 select" >
           <div className="input-group-prepend">
-            <span className="input-group-text select1" >per CT price</span>
+            <span className="input-group-text select1 font" >per CT price</span>
           </div>
           <input type="text" className="form-control" id="karatprice" onChange={this.props.totalprice} />
         </div>

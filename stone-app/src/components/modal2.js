@@ -8,7 +8,7 @@ class Example2 extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            balance: null
+            balance: []
 
         }
     }
@@ -16,11 +16,11 @@ class Example2 extends React.Component {
         var value1 = document.getElementById('totalprice').value
         var value2 = document.getElementById('cashpayment').value
         var balnce = value1 - value2
-        if (balnce >= 0) {
+        // if (balnce >= 0) {
             this.setState({
                 balance: balnce
             })
-        }
+        // }
 
     }
     date = () => {
@@ -61,9 +61,9 @@ class Example2 extends React.Component {
 
         var year = fulldate.getFullYear();
         var miliscnd = fulldate.getMilliseconds();
-        console.log(date, month, year)
-        var merge = `${date}${month}${year}${miliscnd}`
-        return merge
+        var time = `${fulldate.getMinutes()}${fulldate.getHours()}`
+        var merge = `${date}${month}${year}${time}${miliscnd}`
+          return merge
     }
 
     price = () => {
@@ -84,6 +84,7 @@ class Example2 extends React.Component {
         document.getElementById('cashpayment').value = ""
         document.getElementById('balance').value = ""
     }
+    
     render() {
         return (
             <>
@@ -158,14 +159,14 @@ class Example2 extends React.Component {
                         }>
                             Close
                         </Button>
-                        <Button name={this.state.balance} variant="primary" onClick={(ev) => {
+                        <Button name={this.props.shopname} variant="primary" onClick={(ev) => {
+                            // this.props.data2(ev)
                             db.ref().child('data').child(this.props.shopname).child(this.date2()).set(this.price())
                             db.ref().child('payment').child(this.props.shopname).child(this.date()).set(this.price())
                             this.setState({
-                                balance: null
+                                balance: []
                             })
-
-                            this.props.value()
+                            console.log(this.props.datalist)
                             this.innerhtml()
                             this.props.handleClose()
                         }

@@ -17,8 +17,13 @@ class Bottom extends React.Component {
 
         var total = 0;
         if (this.props.datalist) {
+            console.log(this.props.datalist)
             this.props.datalist.map((value) => {
-                return value.totalprice ? total += Number(value.totalprice) : null
+                return (
+                    value ?
+                        total += Number(value.totalprice)
+                        : null
+                )
 
             })
         }
@@ -42,8 +47,8 @@ class Bottom extends React.Component {
 
         var year = fulldate.getFullYear();
         var miliscnd = fulldate.getMilliseconds();
-        console.log(date, month, year)
-        var merge = `${date}${month}${year}${miliscnd}`
+        var time = fulldate.getMinutes() + fulldate.getHours()
+        var merge = `${date}${month}${year}${time}${miliscnd}`
         return merge
     }
 
@@ -67,41 +72,8 @@ class Bottom extends React.Component {
         return merge
     }
 
-    khataClose = (ev) => {
-        var name = ev.target.name;
-        if (this.totalprice() >= 0) {
-            var obj = {
-                balance: {
-                    totalprice: this.totalprice(),
-                    date: this.date()
-                }
-            }
-            console.log(obj)
-
-            db.ref().child('khataBalance').child(name).set(obj).then(() => {
-                this.setState({
-                    balance: obj
-                }, () => {
-                    db.ref().child('data').child(name).on('value', (snap) => {
-                        if (snap.val()) {
-
-                            var data = Object.values(snap.val())
-                            this.setState({
-                                values: data
-                            })
-                        }
-                    })
-                    db.ref().child('khata').child(name).child(this.date2()).set(this.state.values).then(() => {
-
-                        document.getElementById('table1').style.display = 'none'
-                        document.getElementById('table').style.display = 'inline-block'
-                        console.log()
-                        db.ref().child('data').child(name).remove()
-                    })
-                })
-
-            })
-        }
+    componentWillMount() {
+        // this.props.data2(this.props.shopname)
     }
     render() {
         return (
@@ -117,26 +89,32 @@ class Bottom extends React.Component {
                                 </Button>
                             </th>
                             <th>
-                                <Button name={this.props.shopname} variant="danger" onClick={(ev) => { this.khataClose(ev) }}>
-                                    KAHTA # 1
+                                <Button  variant="danger" onClick={(ev) => { 
+                                    // this.khataClose(ev) 
+                                    this.props.handleShow2(ev)
+                                    
+                                    }}>
+                                    Khata Close
                                 </Button>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        {this.props.data ?
-                            this.props.data.map((value, index) => {
-                                return (<tr key={index}>
+                        {/* {this.props.datalist ?
+                            this.props.datalist.map((value, index) => {
+                                return (
+                                value.balance ?
+                                <tr key={index}>
                                     <td className="classestd">{value.date}</td>
-                                    <td className="classestd">{value.total}</td>
+                                    <td className="classestd">{value.balance}</td>
                                     <td className="classestd"></td>
-                                </tr>)
+                                </tr>:"null")
                             })
-                            :
+                            : */}
                             <tr>
                                 <td>{this.date()}</td>
                                 <td>{this.totalprice()}</td>
-                            </tr>}
+                            </tr>
                     </tbody>
                 </Table>
 

@@ -11,24 +11,26 @@ import FormList from './components/formList'
 import Form1 from 'react-bootstrap/Form'
 import Example from './components/modal1';
 import Example3 from './components/modal3';
+import MyVerticallyCenteredModal from './components/centermodal';
 class Form extends React.Component {
   constructor() {
     super()
     this.state = {
       enteries: [],
-      getdata: null,
-      dataList: null,
-      getDataKeys: null,
+      getdata: [],
+      dataList: [],
+      getDataKeys: [],
       modal: false,
       modal2: false,
       modal3: false,
+      modal4: false,
       enterynumber: '',
-      data: null,
-      totalprice: null,
-      value: null,
+      // data: null,
+      totalprice: [],
+      value: [],
       shopname: "",
       data: null,
-      baldata: null,
+      baldata: [],
       prebal: [],
       localgetDataKeys: "seeven star",
       localGetData: [
@@ -99,8 +101,8 @@ class Form extends React.Component {
 
     var year = fulldate.getFullYear();
     var miliscnd = fulldate.getMilliseconds();
-    console.log(date, month, year)
-    var newDate = `${date}${month}${year}${miliscnd}`
+    var time = `${fulldate.getMinutes()}${fulldate.getHours()}`
+    var newDate = `${date}${month}${year}${time}${miliscnd}`
     var obj = {
       date: newDate,
       shopname: shopname,
@@ -124,51 +126,54 @@ class Form extends React.Component {
   }
 
   viewList = (ev) => {
+
     document.getElementById('table1').style.display = 'inline-block'
     document.getElementById('table').style.display = 'none'
     var shopname = ev.target.name;
+    console.log(shopname)
     db.ref().child('data').child(shopname).on('value', (snap) => {
       if (snap.val()) {
         var dataList = Object.values(snap.val())
         console.log(dataList)
-      }
-      this.setState({
-        dataList: dataList,
-        shopname: shopname
-      })
-      var total = 0;
-      if (dataList) {
-
-        dataList.map((value) => {
-
-          return value.totalprice ? total += Number(value.totalprice) : null
+        this.setState({
+          dataList: dataList,
+          shopname: shopname
         })
       }
+      // var total = 0;
+      // if (dataList.length) {
+
+      //   dataList.map((value) => {
+
+      //     return value.totalprice ? total += Number(value.totalprice) : null
+      //   })
+      // }
 
       // if (total) {
-        var obj = {
-          total: total,
-        }
+      // var obj = {
+      //   total: total,
       // }
-      var fulldate = new Date()
-      var date = fulldate.getDate();
-      if (date <= 9) {
-        date = "0" + fulldate.getDate()
-      } else {
-        date = fulldate.getDate()
-      }
+      // // }
+      // var fulldate = new Date()
+      // var date = fulldate.getDate();
+      // if (date <= 9) {
+      //   date = "0" + fulldate.getDate()
+      // } else {
+      //   date = fulldate.getDate()
+      // }
 
-      var month = fulldate.getMonth() + 1;
-      if (month <= 9) {
-        month = `0${fulldate.getMonth() + 1}`
-      } else {
-        var month = fulldate.getMonth() + 1;
-      }
-      var miliscnd = fulldate.getMilliseconds();
-      var year = fulldate.getFullYear();
-      var merge = `${date}${month}${year}${miliscnd}`
-      db.ref().child('payment').child(shopname).child(merge).set(obj)
-      console.log(total)
+      // var month = fulldate.getMonth() + 1;
+      // if (month <= 9) {
+      //   month = `0${fulldate.getMonth() + 1}`
+      // } else {
+      //   var month = fulldate.getMonth() + 1;
+      // }
+      // var miliscnd = fulldate.getMilliseconds();
+      // var year = fulldate.getFullYear();
+      // var time = `${fulldate.getMinutes()}${fulldate.getHours()}`
+      // var merge = `${date}${month}${year}${time}${miliscnd}`
+      // db.ref().child('payment').child(shopname).child(merge).set(obj)
+      // console.log(total)
     })
   }
 
@@ -184,8 +189,8 @@ class Form extends React.Component {
           getDataKeys: getDataKeys,
           getDataKeys2: getDataKeys
         })
-        console.log(getData);
-        console.log(getDataKeys)
+        // console.log(getData);
+        // console.log(getDataKeys)
       } else {
         this.setState({
           getdata: this.state.localData,
@@ -200,6 +205,20 @@ class Form extends React.Component {
     document.getElementById('form').style.display = 'inline-block'
   }
   tablechange = () => {
+    // this.setState({
+    //   dataList: [],
+    // },()=>{
+    //   console.log(this.state.dataList)
+    // })
+    // document.getElementById('tableTbody').innerHTML = ""
+    // console.log(this.state.data)
+    // if(this.state.dataList.length){
+    //   this.setState({
+    //     dataList : ""
+    //   },()=>{
+    //     console.log(true)
+    //   })
+    // }    
     this.setState({
       data: null
     })
@@ -240,6 +259,16 @@ class Form extends React.Component {
       totalprice: ev.target.name
     })
   }
+  handleClose4 = () => {
+    this.setState({
+      modal4: false
+    })
+  }
+  handleShow4 = (ev) => {
+    this.setState({
+      modal4: true,
+    })
+  }
   name = (ev) => {
     this.setState({
       getDataKeys: []
@@ -274,24 +303,49 @@ class Form extends React.Component {
   balance = (value) => {
     this.setState({
       value: value
+
     })
   }
-  value = () => {
+  value = (ev) => {
+    // db.ref().child('payment').child(this.state.shopname).on('value', (snap) => {
+    //   var data = snap.val();
+    //   console.log(data)
+    //   // this.setState({
+    //   //   data: data
+    //   // })
+    // })
+    db.ref().child('khataBalance').on('value', (snap) => {
+      //   var prebal = this.state.prebal
+      //   var dataList = this.state.dataList
+      if (snap.val()) {
 
+        var data = Object.keys(snap.val())
+        console.log(data)
+        //     for (var i = 0; i < data.length; i++) {
+        //       if (data[i] === this.state.shopname && this.state.baldata) {
+        //         prebal.push(this.state.baldata[0])
+        //         dataList.push(this.state.baldata[0])
+        //       }
+        //     }
+      }
+      //   if (prebal.length) {
 
-    db.ref().child('payment').child(this.state.shopname).on('value', (snap) => {
-      var data = snap.val();
-      console.log(data)
-      // this.setState({
-      //   data: data
-      // })
+      //     this.setState({
+      //       prebal,
+      //       dataList,
+      //     })
+      //   }
     })
-
   }
   data2 = (ev) => {
     var name = ev.target.name
-    if (ev.target.name) {
-      db.ref().child('khataBalance').child(ev.target.name).on('value', (snap) => {
+    this.setState({
+      baldata: [],
+      prebal: []
+    })
+
+    if (name) {
+      db.ref().child('khataBalance').child(name).on('value', (snap) => {
         if (snap.val()) {
           var value = Object.values(snap.val());
           console.log(value)
@@ -299,29 +353,35 @@ class Form extends React.Component {
             baldata: value
           })
         }
+        var prebal = this.state.prebal
+        var dataList = this.state.dataList
         db.ref().child('khataBalance').on('value', (snap) => {
-          var prebal = this.state.prebal
-          var dataList = this.state.dataList
           if (snap.val()) {
-
             var data = Object.keys(snap.val())
             for (var i = 0; i < data.length; i++) {
-              if (data[i] === name && this.state.baldata) {
-                prebal.push(this.state.baldata[0])
-                dataList.push(this.state.baldata[0])
+              console.log(this.state.baldata)
+              if (data[i] === name && this.state.baldata.length) {
+                setTimeout(()=>{
+                  db.ref().child('data').child(name).child(this.state.baldata[0].date).set(this.state.baldata[0])
+                },50)
+                // if (prebal.length < 2) {
+                //   prebal.push(this.state.baldata[0])
+                //   dataList.push(this.state.baldata[0])
+                // }
               }
             }
           }
-          if (prebal.length) {
-
-            this.setState({
-              prebal,
-              dataList,
-            })
-          }
+          // if (prebal.length) {
+          //   console.log(this.state.baldata, this.state.prebal)
+          //   this.setState({
+          //     prebal,
+          //     dataList,
+          //   })
+          // }
         })
       })
     }
+
   }
 
 
@@ -365,7 +425,8 @@ class Form extends React.Component {
                     data={this.data2}
                   />
 
-                }) : null
+                }) :
+                null
               }
 
             </tbody>
@@ -386,33 +447,35 @@ class Form extends React.Component {
                 <th scope="col">Weigth</th>
                 <th scope="col">Per ct rate</th>
                 <th scope="col">Total price</th>
-                <th scope="col"><button type="button" className="btn btn-dark" onClick={this.tablechange}>Back</button></th>
+                <th scope="col"><button type="button" className="btn btn-danger" onClick={this.tablechange}>Back</button></th>
               </tr>
             </thead>
-            <tbody>
-              {/* {this.state.prebal.length ?
-                this.state.prebal.map((value, index) => {
-                  return (
-                    <tr key = {index}>
-                      <td>{value.totalprice}</td>
-                    </tr>
-                  )
-                })
-                : null} */}
-              {this.state.dataList ?
-                this.state.dataList.map((values, index) => {
+            {this.state.dataList ?
+              this.state.dataList.map((values, index) => {
+                return values ? <List
+                  key={index}
+                  value={values}
+                  index={index}
+                  data={this.state.baldata ? this.state.baldata : null}
+                  total={this.value}
+                  handleShow={this.handleShow}
+                  data2={this.data2}
+                /> : null
+
+              }) : this.state.localGetData ?
+                this.state.localGetData.map((values, index) => {
                   return <List
                     key={index}
                     value={values}
                     index={index}
-                    data={this.state.baldata ? this.props.baldata : null}
+                    data={this.state.baldata ? this.state.baldata : null}
                     total={this.value}
                     handleShow={this.handleShow}
+                    data2={this.data2}
                   />
 
                 }) : null
-              }
-            </tbody>
+            }
           </table>
           <Example
             show={this.state.modal}
@@ -429,7 +492,10 @@ class Form extends React.Component {
             datalist={this.state.dataList}
             data={this.state.data}
             handleShow={this.handleShow2}
+            data2={this.data2}
             shopname={this.state.shopname}
+          handleShow2={this.handleShow4}
+
           />
           <Example2
             balance={this.balance}
@@ -438,7 +504,15 @@ class Form extends React.Component {
             handleClose={this.handleClose2}
             totalprice={this.state.totalprice}
             shopname={this.state.shopname}
-            value={this.value}
+            data2={this.data2}
+            datalist={this.state.dataList}
+          />
+          <MyVerticallyCenteredModal
+          shopname = {this.state.shopname}
+          dataList = {this.state.dataList}
+          show={this.state.modal4}
+          handleShow={this.handleShow4}
+          handleClose={this.handleClose4}
           />
         </div>
       </div >
