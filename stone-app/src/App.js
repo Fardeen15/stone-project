@@ -12,6 +12,10 @@ import Form1 from 'react-bootstrap/Form'
 import Example from './components/modal1';
 import Example3 from './components/modal3';
 import MyVerticallyCenteredModal from './components/centermodal';
+import Print from './components/print';
+import MyVerticallyCenteredModal2 from './components/shopnameModal';
+import MainPage from './components/mainPage';
+import ViewEntires from './components/viewEntries';
 class Form extends React.Component {
   constructor() {
     super()
@@ -32,6 +36,15 @@ class Form extends React.Component {
       data: null,
       baldata: [],
       prebal: [],
+      print: false,
+      printModaL: false,
+      ShopnameModal: false,
+      selectedShopname: "",
+      form: false,
+      table: false,
+      mainPage: true,
+      table1: false,
+      viewentry : false,
       localgetDataKeys: "seeven star",
       localGetData: [
         {
@@ -77,9 +90,8 @@ class Form extends React.Component {
     document.getElementById('Totalprice').value = weigth * karatprice
   }
 
-
   submit = () => {
-    var shopname = document.getElementById('shopname').value;
+    var shopname = this.state.selectedShopname;
     var stone = document.getElementById('stone').value;
     var weigth1 = document.getElementById('weigth').value;
     var weigth = weigth1 + document.getElementById('karat').innerHTML
@@ -103,8 +115,10 @@ class Form extends React.Component {
     var miliscnd = fulldate.getMilliseconds();
     var time = `${fulldate.getMinutes()}${fulldate.getHours()}`
     var newDate = `${date}${month}${year}${time}${miliscnd}`
+    var date = `${date}/${month}/${year}`
     var obj = {
       date: newDate,
+      newDate: date,
       shopname: shopname,
       stone: stone,
       weigth: weigth,
@@ -114,11 +128,15 @@ class Form extends React.Component {
     var enteries = this.state.enteries;
     enteries.push(obj);
     this.setState({
-      enteries: enteries
+      enteries: enteries,
+      print: true
     })
     console.log(enteries)
-    db.ref().child('data').child(shopname).child(newDate).set(obj)
-    document.getElementById('shopname').value = ""
+    if (this.state.print) {
+      console.log(true)
+    }
+    // db.ref().child('data').child(shopname).child(newDate).set(obj)
+    // document.getElementById('shopname').value = ""
     document.getElementById('stone').value = ""
     document.getElementById('weigth').value = ""
     document.getElementById('karatprice').value = ""
@@ -126,9 +144,12 @@ class Form extends React.Component {
   }
 
   viewList = (ev) => {
-
-    document.getElementById('table1').style.display = 'inline-block'
-    document.getElementById('table').style.display = 'none'
+    this.setState({
+      table1: true,
+      table: false
+    })
+    // document.getElementById('table1').style.display = 'inline-block'
+    // document.getElementById('table').style.display = 'none'
     var shopname = ev.target.name;
     console.log(shopname)
     db.ref().child('data').child(shopname).on('value', (snap) => {
@@ -178,8 +199,12 @@ class Form extends React.Component {
   }
 
   data = (ev) => {
-    document.getElementById('table').style.display = 'inline-block'
-    document.getElementById('form').style.display = 'none'
+    this.setState({
+      mainPage: false,
+      table: true
+    })
+    // document.getElementById('table').style.display = 'inline-block'
+    // document.getElementById('form').style.display = 'none'
     db.ref().child('data').on('value', (snap) => {
       if (snap.val()) {
         var getDataKeys = Object.keys(snap.val())
@@ -201,8 +226,14 @@ class Form extends React.Component {
     })
   }
   back = () => {
-    document.getElementById('table').style.display = 'none'
-    document.getElementById('form').style.display = 'inline-block'
+    // document.getElementById('table').style.display = 'none'
+    // document.getElementById('form').style.display = 'inline-block'
+    this.setState({
+      table: false,
+      form: true,
+      selectedShopname: "",
+      ShopnameModal: true,
+    })
   }
   tablechange = () => {
     // this.setState({
@@ -220,10 +251,12 @@ class Form extends React.Component {
     //   })
     // }    
     this.setState({
-      data: null
+      data: null,
+      table1: false,
+      table: true
     })
-    document.getElementById('table1').style.display = 'none'
-    document.getElementById('table').style.display = 'inline-block'
+    // document.getElementById('table1').style.display = 'none'
+    // document.getElementById('table').style.display = 'inline-block'
   }
   handleClose = () => {
     // const setShow = useState(false);
@@ -267,6 +300,23 @@ class Form extends React.Component {
   handleShow4 = (ev) => {
     this.setState({
       modal4: true,
+    })
+  }
+  handleClose5 = () => {
+    this.setState({
+      printModaL: false,
+      print: false
+
+    })
+  }
+  handleShow5 = (ev) => {
+    this.setState({
+      printModaL: true,
+    })
+  }
+  ShopnameModal = () => {
+    this.setState({
+      ShopnameModal: false,
     })
   }
   name = (ev) => {
@@ -361,9 +411,9 @@ class Form extends React.Component {
             for (var i = 0; i < data.length; i++) {
               console.log(this.state.baldata)
               if (data[i] === name && this.state.baldata.length) {
-                setTimeout(()=>{
+                setTimeout(() => {
                   db.ref().child('data').child(name).child(this.state.baldata[0].date).set(this.state.baldata[0])
-                },50)
+                }, 50)
                 // if (prebal.length < 2) {
                 //   prebal.push(this.state.baldata[0])
                 //   dataList.push(this.state.baldata[0])
@@ -383,88 +433,153 @@ class Form extends React.Component {
     }
 
   }
+  getValue = (ev) => {
+    console.log()
+    this.setState({
+      selectedShopname: ev.target.value
+    })
+  }
+  changePage = () => {
+    this.setState({
+      form: true,
+      ShopnameModal: true,
+      mainPage: false,
+      enteries : [],
 
-
+    })
+  }
+  gotoMain = () => {
+    this.setState({
+      form: false,
+      ShopnameModal: false,
+      enteries : [],
+      mainPage: true
+    })
+  }
+  viewentry = ()=>{
+    this.setState({
+      form: false,
+      viewentry : true
+    })
+  }
+  gotoEntry = ()=>{
+    this.setState({
+      form: true,
+      viewentry : false
+    })
+  }
   render() {
     return (
       <div>
-        <FormList totalprice={this.totalprice} sumbit={this.submit} data={this.data} handleShow={this.handleShow} handleShow2={this.handleShow3} />
-        <div id="table">
-          <div id="searchTr">
-            <InputGroup className="mb-3">
-              <FormControl
-                aria-label="Recipient's username"
-                aria-describedby="basic-addon2"
-                name='value' type="email" id="searchINP" placeholder="Enter email" onChange={(ev) => this.name(ev)}
-              />
-              <InputGroup.Append>
-                <InputGroup.Text id="basic-addon2"> <i className="fas fa-search"></i>
-                </InputGroup.Text>
-              </InputGroup.Append>
-            </InputGroup>
+        {this.state.viewentry ?
+          <ViewEntires
+            data={this.state.enteries}
+            gotoEntry = {this.gotoEntry}
+          />
+          : null}
+        {this.state.mainPage ?
+          <MainPage
+            data={this.data}
+            changePage={this.changePage}
+          />
+          : null}
+        <MyVerticallyCenteredModal2
+          handleShow={this.handleShow}
+          show={this.state.ShopnameModal}
+          handleClose={this.ShopnameModal}
+          getValue={this.getValue}
+          selectedShopname={this.state.selectedShopname}
+          gotoMain={this.gotoMain}
+
+        />
+        {this.state.print ?
+          <Print
+            show={this.state.print}
+            handleClose={this.handleClose5}
+            data={this.state.enteries}
+            selectedShopname={this.state.selectedShopname}
+
+          />
+          : null}
+        {this.state.form ?
+          <FormList
+            totalprice={this.totalprice}
+            sumbit={this.submit}
+            handleShow2={this.handleShow3}
+            handleShow3={this.handleShow5}
+            entries={this.state.enteries}
+            gotoMain={this.gotoMain}
+            viewentry = {this.viewentry}
+          />
+          : null}
+        {this.state.table ?
+          <div id="table">
+            <div id="searchTr">
+              <InputGroup className="mb-3">
+                <FormControl
+                  aria-label="Recipient's username"
+                  aria-describedby="basic-addon2"
+                  name='value' type="email" id="searchINP" placeholder="Enter email" onChange={(ev) => this.name(ev)}
+                />
+                <InputGroup.Append>
+                  <InputGroup.Text id="basic-addon2"> <i className="fas fa-search"></i>
+                  </InputGroup.Text>
+                </InputGroup.Append>
+              </InputGroup>
+
+            </div>
+            <table className="table table-striped table-dark">
+              <thead>
+                <tr id="headTr">
+                  <th scope="col" >#</th>
+                  <th scope="col">Shop Name</th>
+                  <th scope="col">
+
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="tbody">
+                {this.state.getDataKeys ?
+                  this.state.getDataKeys.map((values, index) => {
+                    return <Table
+                      key={index}
+                      value={values}
+                      index={index}
+                      viewlist={this.viewList}
+                      data={this.data2}
+                    />
+
+                  }) :
+                  null
+                }
+
+              </tbody>
+            </table>
+            <div id="addbtn">
+              <button type="button" className="btn btn-secondary btn-circle btn-xl" onClick={this.back}><i className="fas fa-plus addicon" ></i>
+              </button>
+            </div>
 
           </div>
-          <table className="table table-striped table-dark">
-            <thead>
-              <tr id="headTr">
-                <th scope="col" >#</th>
-                <th scope="col">Shop Name</th>
-                <th scope="col">
-
-                </th>
-              </tr>
-            </thead>
-            <tbody id="tbody">
-              {this.state.getDataKeys ?
-                this.state.getDataKeys.map((values, index) => {
-                  return <Table
-                    key={index}
-                    value={values}
-                    index={index}
-                    viewlist={this.viewList}
-                    data={this.data2}
-                  />
-
-                }) :
-                null
-              }
-
-            </tbody>
-          </table>
-          <div id="addbtn">
-            <button type="button" className="btn btn-secondary btn-circle btn-xl" onClick={this.back}><i className="fas fa-plus addicon" ></i>
-            </button>
-          </div>
-
-        </div>
-        <div id="table1">
-          <table className="table">
-            <thead className="thead-light">
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Recipt no</th>
-                <th scope="col">stone</th>
-                <th scope="col">Weigth</th>
-                <th scope="col">Per ct rate</th>
-                <th scope="col">Total price</th>
-                <th scope="col"><button type="button" className="btn btn-danger" onClick={this.tablechange}>Back</button></th>
-              </tr>
-            </thead>
-            {this.state.dataList ?
-              this.state.dataList.map((values, index) => {
-                return values ? <List
-                  key={index}
-                  value={values}
-                  index={index}
-                  data={this.state.baldata ? this.state.baldata : null}
-                  total={this.value}
-                  handleShow={this.handleShow}
-                  data2={this.data2}
-                /> : null
-
-              }) : this.state.localGetData ?
-                this.state.localGetData.map((values, index) => {
-                  return <List
+          : null}
+        {this.state.table1 ?
+          <div id="table1">
+            <table className="table">
+              <thead className="thead-light">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Recipt no</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">stone</th>
+                  <th scope="col">Weigth</th>
+                  <th scope="col">Per ct rate</th>
+                  <th scope="col">Total price</th>
+                  <th scope="col"><button type="button" className="btn btn-danger" onClick={this.tablechange}>Back</button></th>
+                </tr>
+              </thead>
+              {this.state.dataList ?
+                this.state.dataList.map((values, index) => {
+                  return values ? <List
                     key={index}
                     value={values}
                     index={index}
@@ -472,49 +587,63 @@ class Form extends React.Component {
                     total={this.value}
                     handleShow={this.handleShow}
                     data2={this.data2}
-                  />
+                  /> : null
 
-                }) : null
-            }
-          </table>
-          <Example
-            show={this.state.modal}
-            handleShow={this.handleShow}
-            handleClose={this.handleClose}
-          />
-          <Example3
-            show={this.state.modal3}
-            handleShow={this.handleShow3}
-            handleClose={this.handleClose3}
-          />
-          <Bottom
-            value={this.state.value}
-            datalist={this.state.dataList}
-            data={this.state.data}
-            handleShow={this.handleShow2}
-            data2={this.data2}
-            shopname={this.state.shopname}
-          handleShow2={this.handleShow4}
+                }) : this.state.localGetData ?
+                  this.state.localGetData.map((values, index) => {
+                    return <List
+                      key={index}
+                      value={values}
+                      index={index}
+                      data={this.state.baldata ? this.state.baldata : null}
+                      total={this.value}
+                      handleShow={this.handleShow}
+                      data2={this.data2}
+                    />
 
-          />
-          <Example2
-            balance={this.balance}
-            show={this.state.modal2}
-            handleShow={this.handleShow2}
-            handleClose={this.handleClose2}
-            totalprice={this.state.totalprice}
-            shopname={this.state.shopname}
-            data2={this.data2}
-            datalist={this.state.dataList}
-          />
-          <MyVerticallyCenteredModal
-          shopname = {this.state.shopname}
-          dataList = {this.state.dataList}
+                  }) : null
+              }
+            </table>
+
+            <Bottom
+              value={this.state.value}
+              datalist={this.state.dataList}
+              data={this.state.data}
+              handleShow={this.handleShow2}
+              data2={this.data2}
+              shopname={this.state.shopname}
+              handleShow2={this.handleShow4}
+
+            />
+            <Example2
+              balance={this.balance}
+              show={this.state.modal2}
+              handleShow={this.handleShow2}
+              handleClose={this.handleClose2}
+              totalprice={this.state.totalprice}
+              shopname={this.state.shopname}
+              data2={this.data2}
+              datalist={this.state.dataList}
+            />
+          </div>
+          : null}
+        <MyVerticallyCenteredModal
+          shopname={this.state.shopname}
+          dataList={this.state.dataList}
           show={this.state.modal4}
           handleShow={this.handleShow4}
           handleClose={this.handleClose4}
-          />
-        </div>
+        />
+        <Example
+          show={this.state.modal}
+          handleShow={this.handleShow}
+          handleClose={this.handleClose}
+        />
+        <Example3
+          show={this.state.modal3}
+          handleShow={this.handleShow3}
+          handleClose={this.handleClose3}
+        />
       </div >
     );
   }

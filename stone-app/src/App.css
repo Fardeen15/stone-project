@@ -37,14 +37,14 @@ h1{
   font-size: 11px !important;
 }
 #table{
-  display: none;
+  /* display: none; */
   z-index: 1;
   height: 100vh;
   width: 100%;
   background-color: rgba(0,0,0,0.3);
 }
 #table1{
-  display: none;
+  /* display: none; */
   z-index: 1;
   height: 80vh;
   overflow: scroll;
@@ -88,6 +88,19 @@ i{
     right: 4%;
     border-radius: 70px;
 }
+#mainDiv {
+  height: 100vh;
+  background: linear-gradient(to right,  #808080 0%,#e6e6e6 100%);  
+
+}
+#mainDiv div{
+  height: 15vh;
+    width: 50%;
+    position: relative;
+    top: 17%;
+    left: 50%;
+    transform: translate(-50%, -17%);
+}
 @media only screen and (max-width: 800px){
   .Form{
     width: 100%;
@@ -112,7 +125,14 @@ i{
     #table1 table{
       font-size: 13px;
     }
+    #printDiv table{
+      font-size: 13px;
+    }
     #table1 table th{
+      font-size: .8em;
+      padding: .3rem;
+    }
+    #printDiv table th{
       font-size: .8em;
       padding: .3rem;
     }
@@ -144,4 +164,69 @@ i{
 .classestd{
   padding-bottom: 0% !important;
   height: 5px
+}
+h3 , h5 {
+  text-align: center;
+}
+
+.btn-circle2.btn-xl2 {
+  width: 57px;
+  height: 57px;
+  padding: 18px 16px;
+  border-radius: 35px;
+  /* font-size: 24px; */
+  line-height: 1.33;
+}
+
+.btn-circle2 {
+  width: 30px;
+  height: 30px;
+  padding: 6px 0px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.42857;
+}
+#addbtn2{
+  position: fixed;
+    text-align: center;
+    top: 7%;
+    left: 2%;
+    border-radius: 70px;
+}
+.icon{
+  font-size: 13px;
+}
+
+
+
+
+
+.badge-notification {
+  position: relative;
+  margin-right: 10px;
+}
+.badge-notification[data-badge]::after {
+  content: attr(data-badge);
+	position: absolute;
+	top: -11px;
+	right: -10px;
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	width: 22px;
+	height: 22px;
+  line-height: 22px;
+  font-size: 12px;
+  font-weight: 600;
+	border-radius: 50%;
+  background: var(--danger);
+  color: #fff;
+}
+span.badge-notification {
+  margin-right: 24px;
+}
+span.badge-notification[data-badge]::after {
+  top: -11px;
+  right: -24px;
 }
