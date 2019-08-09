@@ -44,7 +44,10 @@ class Form extends React.Component {
       table: false,
       mainPage: true,
       table1: false,
-      viewentry : false,
+      viewentry: false,
+      edit: false,
+      editIndex : "",
+      editdata : "",
       localgetDataKeys: "seeven star",
       localGetData: [
         {
@@ -83,11 +86,18 @@ class Form extends React.Component {
     }
   }
 
-  sevenstar
+
   totalprice = () => {
     var weigth = document.getElementById('weigth').value;
     var karatprice = document.getElementById('karatprice').value;
-    document.getElementById('Totalprice').value = weigth * karatprice
+    var value = `${Math.round(weigth * karatprice)}`
+    if (value.slice(-1) < 5) {
+      value = value - value.slice(-1)
+    } else if (value.slice(-1) >= 5) {
+      value = value - value.slice(-1) + 10
+    }
+    document.getElementById('Totalprice').value = value
+
   }
 
   submit = () => {
@@ -444,7 +454,7 @@ class Form extends React.Component {
       form: true,
       ShopnameModal: true,
       mainPage: false,
-      enteries : [],
+      enteries: [],
 
     })
   }
@@ -452,20 +462,90 @@ class Form extends React.Component {
     this.setState({
       form: false,
       ShopnameModal: false,
-      enteries : [],
+      enteries: [],
       mainPage: true
     })
   }
-  viewentry = ()=>{
+  viewentry = () => {
     this.setState({
       form: false,
-      viewentry : true
+      viewentry: true
     })
   }
-  gotoEntry = ()=>{
+  gotoEntry = () => {
     this.setState({
       form: true,
-      viewentry : false
+      viewentry: false
+    })
+  }
+  printElem = () => {
+    this.setState({
+      print: true
+    })
+  }
+  edit = (ev, index) => {
+    var data = ev[index]
+    this.setState({
+      edit: true,
+      viewentry: false,
+      form: true,
+      editIndex : index,
+      editdata : data 
+    })
+    var weight = data.weigth
+    weight =  weight.slice(0,-2)
+    weight = parseInt(weight)
+    setTimeout(() => {
+        document.getElementById('stone').value = data.stone
+        document.getElementById('weigth').value = weight
+        document.getElementById('karatprice').value = data.perkarat
+        document.getElementById('Totalprice').value = data.totalprice
+    },300)
+  }
+  update = ()=>{
+    var index = this.state.editIndex;
+    var data = this.state.editdata;
+    var stone = document.getElementById('stone').value;
+    var weigth1 = document.getElementById('weigth').value;
+    var weigth = weigth1 + document.getElementById('karat').innerHTML
+    var karatprice = document.getElementById('karatprice').value;
+    var Totalprice = document.getElementById('Totalprice').value;
+    var obj = {
+      date : data.date,
+      newDate : data.newDate,
+      perkarat : karatprice,
+      shopname : data.shopname,
+      stone : stone,
+      weigth : weigth,
+      totalprice : Totalprice
+    }
+    var enteries = this.state.enteries
+    enteries.splice(index,1,obj)
+    document.getElementById('stone').value = ""
+    document.getElementById('weigth').value = ""
+    document.getElementById('karatprice').value = ""
+    document.getElementById('Totalprice').value = ""
+    this.setState({
+      enteries,
+      form: false,
+      viewentry: true,
+      edit : false
+    })
+  }
+  delete = (index)=>{
+    
+    var enteries = this.state.enteries
+    console.log(enteries)
+    enteries.splice(index,1)
+    this.setState({
+      enteries,
+    },()=>{
+    })
+  }
+  gotoViewEntry = () => {
+    this.setState({
+      form: false,
+      viewentry: true
     })
   }
   render() {
@@ -474,7 +554,9 @@ class Form extends React.Component {
         {this.state.viewentry ?
           <ViewEntires
             data={this.state.enteries}
-            gotoEntry = {this.gotoEntry}
+            gotoEntry={this.gotoEntry}
+            edit={this.edit}
+            delete = {this.delete}
           />
           : null}
         {this.state.mainPage ?
@@ -509,7 +591,11 @@ class Form extends React.Component {
             handleShow3={this.handleShow5}
             entries={this.state.enteries}
             gotoMain={this.gotoMain}
-            viewentry = {this.viewentry}
+            viewentry={this.viewentry}
+            print={this.printElem}
+            edit={this.state.edit}
+            gotoViewEntry={this.gotoViewEntry}
+            update = {this.update}
           />
           : null}
         {this.state.table ?
@@ -633,6 +719,7 @@ class Form extends React.Component {
           show={this.state.modal4}
           handleShow={this.handleShow4}
           handleClose={this.handleClose4}
+          tablechange = {this.tablechange}
         />
         <Example
           show={this.state.modal}

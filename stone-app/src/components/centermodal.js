@@ -90,8 +90,8 @@ class MyVerticallyCenteredModal extends React.Component {
                 })
                 db.ref().child('khata').child(name).child(this.date2()).set(this.state.values).then(() => {
 
-                    document.getElementById('table1').style.display = 'none'
-                    document.getElementById('table').style.display = 'inline-block'
+                    // document.getElementById('table1').style.display = 'none'
+                    // document.getElementById('table').style.display = 'inline-block'
                     console.log()
                     db.ref().child('data').child(name).remove()
                 })
@@ -121,6 +121,7 @@ class MyVerticallyCenteredModal extends React.Component {
                     <Button variant = 'danger' onClick={this.props.handleClose}>No</Button>
                     <Button  variant = 'secondary' name={this.props.shopname} onClick={(ev) => {
                         this.khataClose(ev) 
+                        this.props.tablechange()
                         this.props.handleClose(ev)
 
                     }}>Yes</Button>

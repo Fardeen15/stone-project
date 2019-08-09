@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 class ViewEntires extends Component {
+   
     render() {
         return (
             <div id="printDiv">
@@ -32,8 +33,15 @@ class ViewEntires extends Component {
                                         <td>{value.perkarat}</td>
                                         <td>{value.weigth}</td>
                                         <td>{value.totalprice}</td>
-                                        <td><i className="far fa-edit icon"> </i></td>
-                                        <td>  <i className="fas fa-trash-alt icon"></i></td>
+                                        <td>
+                                            <i className="far fa-edit icon" onClick={(ev) => {
+                                                this.props.edit(this.props.data, index)
+                                            }}> </i>
+                                        </td>
+                                        <td>  <i className="fas fa-trash-alt icon" onClick={(ev) => {
+                                                console.log('hello')
+                                                this.props.delete(index)
+                                            }}></i></td>
 
                                     </tr>
                                 )

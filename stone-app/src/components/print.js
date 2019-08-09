@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import { db } from '../firebaseconfig';
-
+import '../App.css'
 class Print extends Component {
     date2 = () => {
         var fulldate = new Date()
@@ -33,6 +33,32 @@ class Print extends Component {
 
         }
     }
+
+    printElem = () => {
+        var content = document.getElementById("printDiv").innerHTML;
+        var mywindow = window.open('', 'Print');
+
+        mywindow.document.write('<html><head><title>Print</title>');
+        mywindow.document.write(`<style>
+        h3 , h5 {
+            text-align: center;
+          }
+          
+        </style>`)
+        mywindow.document.write('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">')
+
+        mywindow.document.write('</head><body >');
+        mywindow.document.write(content);
+        mywindow.document.write('</body></html>');
+
+        mywindow.document.close();
+        // mywindow.focus()
+
+        // mywindow.close();
+        setTimeout(() => { mywindow.print() }, 750)
+        return true;
+    }
+
     render() {
         console.log(this.props.data)
         return (
@@ -49,39 +75,42 @@ class Print extends Component {
                 </Modal.Header>
                 <Modal.Body style={{ 'overflow': 'scroll' }}>
                     <div id="printDiv">
-                        <h3>Shopname</h3>
-                        <h5>({this.props.data[0].shopname})</h5>
+                        <div>
 
-                        <table className="table">
-                            <thead className="thead-dark">
-                                <tr>
-                                    <th>S no</th>
-                                    <th>recipt no</th>
-                                    <th>Date</th>
-                                    <th>Stone</th>
-                                    <th>per CT</th>
-                                    <th>Weigth</th>
-                                    <th>total price</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {this.props.data ?
-                                    this.props.data.map((value, index) => {
-                                        return (
-                                            <tr key={index}>
-                                                <td>{index + 1}</td>
-                                                <td>{value.date}</td>
-                                                <td>{value.newDate}</td>
-                                                <td>{value.stone}</td>
-                                                <td>{value.perkarat}</td>
-                                                <td>{value.weigth}</td>
-                                                <td>{value.totalprice}</td>
-                                            </tr>
-                                        )
-                                    })
-                                    : null}
-                            </tbody>
-                        </table>
+                            <h3>Shopname</h3>
+                            <h5>({this.props.data[0].shopname})</h5>
+
+                            <table className="table">
+                                <thead className="thead-dark">
+                                    <tr>
+                                        <th>S no</th>
+                                        <th>recipt no</th>
+                                        <th>Date</th>
+                                        <th>Stone</th>
+                                        <th>per CT</th>
+                                        <th>Weigth</th>
+                                        <th>total price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.props.data ?
+                                        this.props.data.map((value, index) => {
+                                            return (
+                                                <tr key={index}>
+                                                    <td>{index + 1}</td>
+                                                    <td>{value.date}</td>
+                                                    <td>{value.newDate}</td>
+                                                    <td>{value.stone}</td>
+                                                    <td>{value.perkarat}</td>
+                                                    <td>{value.weigth}</td>
+                                                    <td>{value.totalprice}</td>
+                                                </tr>
+                                            )
+                                        })
+                                        : null}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
@@ -91,6 +120,7 @@ class Print extends Component {
                     <Button variant="primary" onClick={() => {
                         this.setData()
                         this.props.handleClose()
+                        this.printElem()
                     }}>Print & Save </Button>
                 </Modal.Footer>
             </Modal>
