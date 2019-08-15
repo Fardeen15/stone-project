@@ -10,6 +10,9 @@ class MainPage extends Component {
                 <div className="input-group mb-3 select" >
                     <button type="button" className="btn btn-secondary" id="customer" onClick={this.props.data}>Customers</button>
                 </div>
+                <div className="input-group mb-3 select" >
+                    <button type="button" className="btn btn-secondary" id="customer" onClick = {this.props.signOut}>sign out</button>
+                </div>
             </div>
 
         )

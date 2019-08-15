@@ -1,5 +1,5 @@
 import React from 'react'
-import { db } from '../firebaseconfig';
+import { db, auth } from '../firebaseconfig';
 import Badge from 'react-bootstrap/Badge'
 class FormList extends React.Component {
   constructor() {
@@ -9,14 +9,18 @@ class FormList extends React.Component {
     }
   }
   stone = () => {
-    db.ref().child("stones").on('value', (snap) => {
-      if (snap.val()) {
+    auth.onAuthStateChanged( (user) => {
+      if (user) {
+        db.ref().child(user.uid).child("stones").on('value', (snap) => {
+          if (snap.val()) {
 
-        var data = Object.keys(snap.val())
-        this.setState({
-          stone: data
-        }, () => {
-          console.log(this.state.stone)
+            var data = Object.keys(snap.val())
+            this.setState({
+              stone: data
+            }, () => {
+              console.log(this.state.stone)
+            })
+          }
         })
       }
     })
@@ -29,19 +33,19 @@ class FormList extends React.Component {
   render() {
     return (
       <div className="Form" id="form">
-        {this.props.edit ? 
-        <h1>Edit Form</h1>
-        :
-        <h1>Submit Form</h1>
+        {this.props.edit ?
+          <h1>Edit Form</h1>
+          :
+          <h1>Submit Form</h1>
         }
         <div id="addbtn2">
-          <button type="button" className="btn btn-secondary btn-circle2 btn-xl2" onClick={()=>{
-            if(!this.props.edit){
+          <button type="button" className="btn btn-secondary btn-circle2 btn-xl2" onClick={() => {
+            if (!this.props.edit) {
               this.props.gotoMain()
-            }else{
+            } else {
               this.props.gotoViewEntry()
             }
-            }}><i className="fas fa-arrow-left addicon"></i>
+          }}><i className="fas fa-arrow-left addicon"></i>
           </button>
         </div>
         <div className="input-group mb-3 select">
@@ -84,41 +88,43 @@ class FormList extends React.Component {
           <input type="text" className="form-control Totalprice" id="Totalprice" disabled />
         </div>
         {!this.props.edit ?
-        <div style = {{"position": "relative" ,
-          "top": "11%"}}>
-        <div className="input-group mb-3 select" >
-          <button type="button" className="btn btn-secondary" id="submit" onClick={() => {
-            this.props.sumbit()
-            this.props.handleShow3()
-          }
-        }>submit</button>
-        </div>
-        <div className="input-group mb-3 select" >
-          {/* <div id="addbtn2" className="btn btn-danger btn-circle3 btn-xl3">
+          <div style={{
+            "position": "relative",
+            "top": "11%"
+          }}>
+            <div className="input-group mb-3 select" >
+              <button type="button" className="btn btn-secondary" id="submit" onClick={() => {
+                this.props.sumbit()
+                this.props.handleShow3()
+              }
+              }>submit</button>
+            </div>
+            <div className="input-group mb-3 select" >
+              {/* <div id="addbtn2" className="btn btn-danger btn-circle3 btn-xl3">
             <h1>1</h1>
           </div> */}
 
-          <button data-badge={this.props.entries.length} disabled={!this.props.entries.length} type="button" className="btn btn-secondary d-block  badge-notification" id="customer" onClick={() => {
-            this.props.viewentry()
-          }}>
-            View Entires
+              <button data-badge={this.props.entries.length} disabled={!this.props.entries.length} type="button" className="btn btn-secondary d-block  badge-notification" id="customer" onClick={() => {
+                this.props.viewentry()
+              }}>
+                View Entires
         </button>
-        </div>
-        {this.props.entries.length?
-          <div className="input-group mb-3 select" >
-          <button type="button" className="btn btn-secondary" id="customer" onClick={() => {
-            this.props.print()
-          }}>
-            Print
+            </div>
+            {this.props.entries.length ?
+              <div className="input-group mb-3 select" >
+                <button type="button" className="btn btn-secondary" id="customer" onClick={() => {
+                  this.props.print()
+                }}>
+                  Print
         </button>
-        </div>
-        : null}
-        </div>
-        :<div className="input-group mb-3 select" >
-          <button type="button" className="btn btn-secondary" id="customer" onClick = {()=>this.props.update()} >
-            Update
+              </div>
+              : null}
+          </div>
+          : <div className="input-group mb-3 select" >
+            <button type="button" className="btn btn-secondary" id="customer" onClick={() => this.props.update()} >
+              Update
         </button>
-        </div>}
+          </div>}
       </div>
     )
   }

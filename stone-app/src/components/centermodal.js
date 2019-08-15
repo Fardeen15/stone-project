@@ -1,7 +1,7 @@
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import React from 'react';
-import { db } from '../firebaseconfig';
+import { db, auth } from '../firebaseconfig';
 
 class MyVerticallyCenteredModal extends React.Component {
     totalprice = () => {
@@ -74,29 +74,33 @@ class MyVerticallyCenteredModal extends React.Component {
                 }
             }
             console.log(obj)
+            auth.onAuthStateChanged((user) => {
+                if (user) {
 
-            db.ref().child('khataBalance').child(name).set(obj).then(() => {
-                this.setState({
-                    balance: obj
-                })
-                db.ref().child('data').child(name).on('value', (snap) => {
-                    if (snap.val()) {
-
-                        var data = Object.values(snap.val())
+                    db.ref().child(user.uid).child('khataBalance').child(name).set(obj).then(() => {
                         this.setState({
-                            values: data
+                            balance: obj
                         })
-                    }
-                })
-                db.ref().child('khata').child(name).child(this.date2()).set(this.state.values).then(() => {
+                        db.ref().child(user.uid).child('data').child(name).on('value', (snap) => {
+                            if (snap.val()) {
 
-                    // document.getElementById('table1').style.display = 'none'
-                    // document.getElementById('table').style.display = 'inline-block'
-                    console.log()
-                    db.ref().child('data').child(name).remove()
-                })
+                                var data = Object.values(snap.val())
+                                this.setState({
+                                    values: data
+                                })
+                            }
+                        })
+                        db.ref().child(user.uid).child('khata').child(name).child(this.date2()).set(this.state.values).then(() => {
+
+                            // document.getElementById('table1').style.display = 'none'
+                            // document.getElementById('table').style.display = 'inline-block'
+                            console.log()
+                            db.ref().child(user.uid).child('data').child(name).remove()
+                        })
 
 
+                    })
+                }
             })
         }
     }
@@ -110,17 +114,14 @@ class MyVerticallyCenteredModal extends React.Component {
                 centered
             >
                 <Modal.Header closeButton>
-                    {/* <Modal.Title id="contained-modal-title-vcenter">
-                        Modal heading
-          </Modal.Title> */}
                 </Modal.Header>
                 <Modal.Body>
                     <h4>Do You Want To Khata Close</h4>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant = 'danger' onClick={this.props.handleClose}>No</Button>
-                    <Button  variant = 'secondary' name={this.props.shopname} onClick={(ev) => {
-                        this.khataClose(ev) 
+                    <Button variant='danger' onClick={this.props.handleClose}>No</Button>
+                    <Button variant='secondary' name={this.props.shopname} onClick={(ev) => {
+                        this.khataClose(ev)
                         this.props.tablechange()
                         this.props.handleClose(ev)
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
-import { db } from '../firebaseconfig';
+import { db, auth } from '../firebaseconfig';
 import '../App.css'
 class Print extends Component {
     date2 = () => {
@@ -27,11 +27,14 @@ class Print extends Component {
     }
     setData = () => {
         var data = this.props.data;
-        for (var i = 0; i < data.length; i++) {
-            console.log(data[i])
-            db.ref().child('data').child(data[i].shopname).child(data[i].date).set(data[i])
-
-        }
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                for (var i = 0; i < data.length; i++) {
+                    console.log(data[i])
+                    db.ref().child(user.uid).child('data').child(data[i].shopname).child(data[i].date).set(data[i])
+                }
+            }
+        })
     }
 
     printElem = () => {

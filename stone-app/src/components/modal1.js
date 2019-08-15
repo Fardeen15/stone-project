@@ -3,23 +3,29 @@ import Button from 'react-bootstrap/Button'
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import React from 'react';
-import { db } from '../firebaseconfig';
+import { db, auth } from '../firebaseconfig';
 
 class Example extends React.Component {
-    constructor(){
+    constructor() {
         super()
         this.state = {
-            value : ""
+            value: ""
         }
     }
-    name = (ev)=>{
+    name = (ev) => {
         this.setState({
-            value : ev.target.value
+            value: ev.target.value
         })
+        console.log(ev.target.value)
     }
     setName = () => {
         console.log(this.state.value)
-        db.ref().child('shopNames').child(this.state.value).set(this.state.value)
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+
+                db.ref().child(user.uid).child('shopNames').child(this.state.value).set(this.state.value)
+            }
+        })
     }
     render() {
         return (
@@ -37,7 +43,7 @@ class Example extends React.Component {
                                 id="name"
                                 aria-label="Default"
                                 aria-describedby="inputGroup-sizing-default"
-                                onChange = {(ev)=>this.name(ev)}
+                                onChange={(ev) => this.name(ev)}
                             />
                         </InputGroup>
                     </Modal.Body>

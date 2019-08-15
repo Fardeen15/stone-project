@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button'
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import React from 'react';
-import { db } from '../firebaseconfig';
+import { db, auth } from '../firebaseconfig';
 class Example2 extends React.Component {
     constructor(props) {
         super(props)
@@ -17,24 +17,24 @@ class Example2 extends React.Component {
         var value2 = document.getElementById('cashpayment').value
         var balnce = value1 - value2
         // if (balnce >= 0) {
-            this.setState({
-                balance: balnce
-            })
+        this.setState({
+            balance: balnce
+        })
         // }
 
     }
     date = () => {
         var fulldate = new Date()
         var date = fulldate.getDate();
-        if(date <= 9){
-            date = "0"+ fulldate.getDate()
-        }else{
+        if (date <= 9) {
+            date = "0" + fulldate.getDate()
+        } else {
             date = fulldate.getDate()
         }
         var month = fulldate.getMonth() + 1;
-        if(month <= 9){
-            month = `0${fulldate.getMonth()+1}`
-        }else{
+        if (month <= 9) {
+            month = `0${fulldate.getMonth() + 1}`
+        } else {
             var month = fulldate.getMonth() + 1;
         }
 
@@ -47,15 +47,15 @@ class Example2 extends React.Component {
     date2 = () => {
         var fulldate = new Date()
         var date = fulldate.getDate();
-        if(date <= 9){
-            date = "0"+ fulldate.getDate()
-        }else{
+        if (date <= 9) {
+            date = "0" + fulldate.getDate()
+        } else {
             date = fulldate.getDate()
         }
         var month = fulldate.getMonth() + 1;
-        if(month <= 9){
-            month = `0${fulldate.getMonth()+1}`
-        }else{
+        if (month <= 9) {
+            month = `0${fulldate.getMonth() + 1}`
+        } else {
             var month = fulldate.getMonth() + 1;
         }
 
@@ -63,13 +63,14 @@ class Example2 extends React.Component {
         var miliscnd = fulldate.getMilliseconds();
         var time = `${fulldate.getMinutes()}${fulldate.getHours()}`
         var merge = `${date}${month}${year}${time}${miliscnd}`
-          return merge
+        return merge
     }
 
     price = () => {
         var date = document.getElementById('dateInp').value;
         var total = document.getElementById('totalprice').value;
         var cashpayment = document.getElementById('cashpayment').value;
+        console.log(date, total, cashpayment)
         var obj = {
             date: date,
             total: total,
@@ -84,7 +85,7 @@ class Example2 extends React.Component {
         document.getElementById('cashpayment').value = ""
         document.getElementById('balance').value = ""
     }
-    
+
     render() {
         return (
             <>
@@ -161,14 +162,21 @@ class Example2 extends React.Component {
                         </Button>
                         <Button name={this.props.shopname} variant="primary" onClick={(ev) => {
                             // this.props.data2(ev)
-                            db.ref().child('data').child(this.props.shopname).child(this.date2()).set(this.price())
-                            db.ref().child('payment').child(this.props.shopname).child(this.date()).set(this.price())
-                            this.setState({
-                                balance: []
+                            auth.onAuthStateChanged((user) => {
+                                if (user) {
+                                    console.log(this.price())
+                                    db.ref().child(user.uid).child('data').child(this.props.shopname).child(this.date2()).set(this.price())
+                                    db.ref().child(user.uid).child('payment').child(this.props.shopname).child(this.date2()).set(this.price())
+                                }
                             })
                             console.log(this.props.datalist)
-                            this.innerhtml()
-                            this.props.handleClose()
+                            setTimeout(() => {
+                                this.setState({
+                                    balance: []
+                                })
+                                this.innerhtml()
+                                this.props.handleClose()
+                            }, 100)
                         }
                         }>
                             Save Changes
