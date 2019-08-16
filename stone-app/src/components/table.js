@@ -10,6 +10,7 @@ class Table extends React.Component {
     }
 
     render() {
+        console.log(this.props.state)
         return (
             < tr >
                 <td>{this.props.index + 1}</td>

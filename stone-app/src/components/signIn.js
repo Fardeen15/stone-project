@@ -3,8 +3,8 @@ import { auth } from '../firebaseconfig';
 // import '../all.css';
 class SignIN extends Component {
 
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
             show : false,
         }
@@ -49,14 +49,15 @@ class SignIN extends Component {
                 <form id = "signupForm" onSubmit={(ev) => {
                     // ev.preventDefault()
                     this.signIn(ev)
+                    console.log(this.props.state)
                 }}>
                     <div className="form-group ">
                         {/* <label htmlFor="exampleInputEmail1">Email address</label> */}
-                        <input type="email" id="email" className="form-control" aria-describedby="emailHelp" placeholder="Enter email" />
+                        <input required type="email" id="email" className="form-control" aria-describedby="emailHelp" placeholder="Enter email" />
                     </div>
                     <div className="form-group ">
                         {/* <label htmlFor="exampleInputPassword1">Password</label> */}
-                        <input type={`${this.state.show ? "text" : "password"}`}className="form-control"  id="password" placeholder="Password" />
+                        <input required type={`${this.state.show ? "text" : "password"}`}className="form-control"  id="password" placeholder="Password" />
                         <span id = "showPAss">{this.state.show ? <i className="fas fa-eye-slash icon" onClick = {()=>this.showpass()}></i> : <i className="fas fa-eye icon" onClick = {()=>this.showpass()}></i>}</span>
 
                     </div>

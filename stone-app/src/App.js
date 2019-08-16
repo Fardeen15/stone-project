@@ -326,12 +326,21 @@ class Form extends React.Component {
       modal4: true,
     })
   }
-  handleClose5 = () => {
-    this.setState({
-      printModaL: false,
-      print: false
+  handleClose5 = (addmore) => {
+    console.log(addmore)
+    if (addmore === "addmore") {
+      this.setState({
+        printModaL: false,
+        print: false,
+      })
+    } else if (addmore === "print") {
 
-    })
+      this.setState({
+        printModaL: false,
+        print: false,
+        enteries: []
+      })
+    }
   }
   handleShow5 = (ev) => {
     this.setState({
@@ -445,11 +454,11 @@ class Form extends React.Component {
                   console.log(this.state.baldata)
                   if (data[i] === name && this.state.baldata.length) {
                     setTimeout(() => {
-                      // auth.onAuthStateChanged((user) => {
-                      //   if (user) {
-                      db.ref().child(user.uid).child('data').child(name).child(this.state.baldata[0].date).set(this.state.baldata[0])
-                      //   }
-                      // })
+                      auth.onAuthStateChanged((user) => {
+                        if (user) {
+                          db.ref().child(user.uid).child('data').child(name).child(this.state.baldata[0].date).set(this.state.baldata[0])
+                        }
+                      })
                     }, 50)
                     // if (prebal.length < 2) {
                     //   prebal.push(this.state.baldata[0])
@@ -588,32 +597,49 @@ class Form extends React.Component {
   }
   gotoMainPage = () => {
     this.setState({
-      SignIn: false,
-      mainPage: true,
+      enteries: [],
+      dataList: null,
+      getDataKeys: null,
+      getDataKeys2: null,
+      getdata: [],
+    }, () => {
+      this.setState({
+        SignIn: false,
+        mainPage: true,
+      })
     })
   }
   gotoSignIn = () => {
+
     this.setState({
       SignIn: true,
       signup: false,
     })
+
   }
   componentWillMount() {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        this.setState({
-          SignIn: false,
-          mainPage: true
-        })
+        this.gotoMainPage()
       }
     })
   }
   signOut = () => {
-
+    this.setState({
+      enteries: [],
+      dataList: null,
+      getDataKeys: null,
+      getDataKeys2: null,
+      getdata: [],
+      selectedShopname: ""
+    }, () => {
+    })
     auth.signOut().then(() => {
       this.setState({
-        mainPage : false,
-        SignIn : true
+        mainPage: false,
+        SignIn: true,
+        // enteries: [],
+        // dataList : null
       })
     }).catch(function (error) {
       // An error happened.
@@ -621,6 +647,7 @@ class Form extends React.Component {
   }
 
   render() {
+    console.log(this.props, this.state)
     return (
       <div>
         {
@@ -628,6 +655,7 @@ class Form extends React.Component {
             <SignIN
               mainPage={this.gotoMainPage}
               signup={this.gotoSignup}
+              state={this.state}
             />
             : null
         }
@@ -654,7 +682,7 @@ class Form extends React.Component {
             <MainPage
               data={this.data}
               changePage={this.changePage}
-              signOut = {this.signOut}
+              signOut={this.signOut}
             />
             : null
         }
@@ -692,6 +720,7 @@ class Form extends React.Component {
               edit={this.state.edit}
               gotoViewEntry={this.gotoViewEntry}
               update={this.update}
+              shopname={this.state.selectedShopname}
             />
             : null
         }
@@ -718,7 +747,12 @@ class Form extends React.Component {
                     <th scope="col" >#</th>
                     <th scope="col">Shop Name</th>
                     <th scope="col">
-
+                      <button className="btn btn-danger" onClick={() => {
+                        this.setState({
+                          mainPage: true,
+                          table: false
+                        })
+                      }}>Back to mainPage</button>
                     </th>
                   </tr>
                 </thead>
@@ -727,6 +761,7 @@ class Form extends React.Component {
                     this.state.getDataKeys.map((values, index) => {
                       return <Table
                         key={index}
+                        state={this.state}
                         value={values}
                         index={index}
                         viewlist={this.viewList}

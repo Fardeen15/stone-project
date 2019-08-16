@@ -36,7 +36,10 @@ class FormList extends React.Component {
         {this.props.edit ?
           <h1>Edit Form</h1>
           :
+          <span>
           <h1>Submit Form</h1>
+          <h3>Shopname : ({this.props.shopname})</h3>
+          </span>
         }
         <div id="addbtn2">
           <button type="button" className="btn btn-secondary btn-circle2 btn-xl2" onClick={() => {

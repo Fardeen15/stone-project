@@ -19,11 +19,15 @@ class Example extends React.Component {
         console.log(ev.target.value)
     }
     setName = () => {
-        console.log(this.state.value)
+        console.log(this.state.value,"62164564564")
         auth.onAuthStateChanged((user) => {
-            if (user) {
+            if (user && this.state.value ) {
 
-                db.ref().child(user.uid).child('shopNames').child(this.state.value).set(this.state.value)
+                db.ref().child(user.uid).child('shopNames').child(this.state.value).set(this.state.value).then(()=>{
+                    this.setState({
+                        value : ""
+                    })
+                })
             }
         })
     }
@@ -54,6 +58,7 @@ class Example extends React.Component {
                         <Button variant="primary" onClick={() => {
                             this.setName()
                             this.props.handleClose()
+                            
                         }}>Save Changes</Button>
                     </Modal.Footer>
                 </Modal>

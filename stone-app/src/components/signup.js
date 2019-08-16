@@ -88,22 +88,22 @@ class Signup extends Component {
 
                     <div className="form-row form-group">
                         <div className="col">
-                            <input type="text" id="fname" className="form-control" placeholder="First name" />
+                            <input required type="text" id="fname" className="form-control" placeholder="First name" />
                         </div>
                         <div className="col">
-                            <input type="text" id="lname" className="form-control" placeholder="Last name" />
+                            <input required type="text" id="lname" className="form-control" placeholder="Last name" />
                         </div>
                     </div>
 
                     <div className="form-group">
-                        <input type="email" id="signUpEmail" className="form-control" aria-describedby="emailHelp" placeholder="Enter email" />
+                        <input required type="email" id="signUpEmail" className="form-control" aria-describedby="emailHelp" placeholder="Enter email" />
                     </div>
                     <div className="form-group">
-                        <input type={`${this.state.show ? "text" : "password"}`} placeholder="Password" id="signUpPassword" className="form-control" />
+                        <input required type={`${this.state.show ? "text" : "password"}`} placeholder="Password" id="signUpPassword" className="form-control" />
                         <span id="showPAss">{this.state.show ? <i className="fas fa-eye-slash icon" onClick={() => this.showpass()}></i> : <i className="fas fa-eye icon" onClick={() => this.showpass()}></i>}</span>
                     </div>
                     <div className="form-group">
-                        <input name="conformPassword" type="password" onChange={(ev) => this.password(ev)} placeholder="Conform Password" id="conformPassword" className={`form-control ${this.state.value ? "is-valid" : this.state.conformPassword === "" ? null : "is-invalid"}`} />
+                        <input required name="conformPassword" type="password" onChange={(ev) => this.password(ev)} placeholder="Conform Password" id="conformPassword" className={`form-control ${this.state.value ? "is-valid" : this.state.conformPassword === "" ? null : "is-invalid"}`} />
                     </div>
                     <button className="btn btn-primary  btn-block" >Submit</button>
                     <button className="btn btn-secondary  btn-block" onClick={this.props.SignIN}>Sign In</button><br /><br />

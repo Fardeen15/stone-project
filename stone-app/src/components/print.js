@@ -28,10 +28,13 @@ class Print extends Component {
     setData = () => {
         var data = this.props.data;
         auth.onAuthStateChanged((user) => {
-            if (user) {
-                for (var i = 0; i < data.length; i++) {
-                    console.log(data[i])
-                    db.ref().child(user.uid).child('data').child(data[i].shopname).child(data[i].date).set(data[i])
+            for (var i = 0; i < data.length; i++) {
+                if (user && data) {
+                    console.log(user.uid)
+                    db.ref().child(user.uid).child('data').child(data[i].shopname).child(data[i].date).set(data[i]).then(()=>{
+                        console.log("succesful",user.uid)
+                        data = ""
+                    })
                 }
             }
         })
@@ -118,11 +121,11 @@ class Print extends Component {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="danger" onClick={() => {
-                        this.props.handleClose()
+                        this.props.handleClose("addmore")
                     }}>Add More Item</Button>
                     <Button variant="primary" onClick={() => {
                         this.setData()
-                        this.props.handleClose()
+                        this.props.handleClose("print")
                         this.printElem()
                     }}>Print & Save </Button>
                 </Modal.Footer>
