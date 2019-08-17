@@ -1,7 +1,7 @@
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import React from 'react';
-import { db,auth } from '../firebaseconfig';
+import { db, auth } from '../firebaseconfig';
 
 
 class MyVerticallyCenteredModal2 extends React.Component {
@@ -37,6 +37,8 @@ class MyVerticallyCenteredModal2 extends React.Component {
                 show={this.props.show} onHide={() => {
                     if (this.props.selectedShopname) {
                         this.props.handleClose()
+                    } else {
+                        this.props.gotoMain()
                     }
                 }}
                 size="lg"
@@ -61,7 +63,10 @@ class MyVerticallyCenteredModal2 extends React.Component {
                                 }) : null
                             }
                         </datalist>
-                        <span className="input-group-text" id="name" onClick={() => this.props.handleShow()}><i className="fas fa-plus addicon2" ></i></span>
+                        <span className="input-group-text" id="name" onClick={() => {
+                            this.props.handleShow()
+                            document.getElementById('shopname').value = ""
+                        }}><i className="fas fa-plus addicon2" ></i></span>
 
                     </div>
                 </Modal.Body>
@@ -70,10 +75,10 @@ class MyVerticallyCenteredModal2 extends React.Component {
                         this.props.handleClose(ev)
                     }}>Go...</Button>
                 </Modal.Footer>
-                <div id="addbtn2">
+                {/* <div id="addbtn2">
                     <button type="button" className="btn btn-secondary btn-circle2 btn-xl2" onClick={this.props.gotoMain}><i className="fas fa-arrow-left addicon"></i>
                     </button>
-                </div>
+                </div> */}
 
 
             </Modal>

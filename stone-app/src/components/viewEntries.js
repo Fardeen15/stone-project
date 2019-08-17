@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 class ViewEntires extends Component {
-   
+
     render() {
         return (
             <div id="printDiv">
@@ -19,6 +19,9 @@ class ViewEntires extends Component {
                             <th><button type="button" className="btn btn-secondary" onClick={() => {
                                 this.props.gotoEntry()
                             }}>Back</button></th>
+                            <th><button type="button" className="btn btn-primary" onClick={() => {
+                                this.props.print()
+                            }}>print</button></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,9 +42,9 @@ class ViewEntires extends Component {
                                             }}> </i>
                                         </td>
                                         <td>  <i className="fas fa-trash-alt icon" onClick={(ev) => {
-                                                console.log('hello')
-                                                this.props.delete(index)
-                                            }}></i></td>
+                                            console.log('hello')
+                                            this.props.delete(index)
+                                        }}></i></td>
 
                                     </tr>
                                 )

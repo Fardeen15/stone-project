@@ -24,7 +24,7 @@ class MainPage extends Component {
         return (
             <div id="mainDiv">
                 <h1>Main DashBoard </h1>
-                <h5>({this.state.email})</h5>
+                <h5>Sign In Us : ({this.state.email})</h5>
                 <div className="input-group mb-3 select" >
                     <button type="button" className="btn btn-secondary" id="customer" onClick={this.props.changePage}>Add Enties</button>
                 </div>

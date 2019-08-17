@@ -338,6 +338,8 @@ class Form extends React.Component {
       this.setState({
         printModaL: false,
         print: false,
+        form : false,
+        mainPage : true,
         enteries: []
       })
     }
@@ -610,10 +612,10 @@ class Form extends React.Component {
     })
   }
   gotoSignIn = () => {
-
     this.setState({
       SignIn: true,
       signup: false,
+      mainPage : false
     })
 
   }
@@ -664,6 +666,7 @@ class Form extends React.Component {
           this.state.signup ?
             <Signup
               SignIN={this.gotoSignIn}
+              signOut = {this.signOut}
             />
             : null
         }
@@ -674,6 +677,7 @@ class Form extends React.Component {
               gotoEntry={this.gotoEntry}
               edit={this.edit}
               delete={this.delete}
+              print = {this.printElem}
             />
             : null
         }

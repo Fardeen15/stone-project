@@ -20,8 +20,12 @@ class Example3 extends React.Component {
     setName = () => {
         console.log(this.state.value)
         auth.onAuthStateChanged((user) => {
-            if (user) {
-                db.ref().child(user.uid).child('stones').child(this.state.value).set(this.state.value)
+            if (user && this.state.value ) {
+                db.ref().child(user.uid).child('stones').child(this.state.value).set(this.state.value).then(()=>{
+                    this.setState({
+                        value : ""
+                    })
+                })
             }
         })
     }

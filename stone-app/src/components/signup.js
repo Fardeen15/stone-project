@@ -4,8 +4,8 @@ import { db } from '../firebaseconfig';
 // import '../all.css';
 
 class Signup extends Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
             obj: null,
             value: false,
@@ -30,8 +30,11 @@ class Signup extends Component {
         }
         // })
         auth.createUserWithEmailAndPassword(email, password)
-            .then(function (res) {
+            .then((res) => {
                 db.ref().child(res.user.uid).child('personal Information').set(obj)
+                auth.signOut().then(() => {
+                    this.props.SignIN()
+                })
             })
             .catch(function (error) {
                 // Handle Errors here.
@@ -83,7 +86,7 @@ class Signup extends Component {
                 <h1>Sign Up</h1><br /><br />
                 <form id="signupForm" onSubmit={(ev) => {
                     this.signUp(ev)
-                    this.props.SignIN()
+                   
                 }}>
 
                     <div className="form-row form-group">
