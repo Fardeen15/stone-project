@@ -2,13 +2,40 @@ import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import React from 'react';
 import { db, auth } from '../firebaseconfig';
+import Select from 'react-select'
 
+
+const option = [
+    { value: "st", label: "st" },
+    { value: "ruby", label: "ruby" },
+    { value: "star", label: "star" },
+    // {value : "st" , label : "st"},
+]
+var obj = [];
+// console.log(this.state.data)
+// if (this.state.data) {
+
+//     this.state.data.map((value, index) => {
+//         return obj.push({ value: value, label: value })
+//     })
+//     if (obj !== []) {
+
+//         this.setState({
+//             value: obj
+//         }, () => {
+//             console.log(this.state.value)
+//         })
+//     }
+// }
 
 class MyVerticallyCenteredModal2 extends React.Component {
     constructor() {
         super()
         this.state = {
             data: null,
+            value: "",
+            inputValue : "",
+            isSearchable : false
         }
     }
     data = () => {
@@ -20,15 +47,34 @@ class MyVerticallyCenteredModal2 extends React.Component {
                         var data = Object.keys(snap.val())
                         this.setState({
                             data: data
+                        }, () => {
+                            // console.log(this.state.data)
                         })
+                        var obj = [];
+                        console.log(this.state.data)
+                        if (this.state.data) {
+                
+                            this.state.data.map((value, index) => {
+                                return obj.push({ value: value, label: value })
+                            })
+                            if (obj !== []) {
+                
+                                this.setState({
+                                    value: obj
+                                }, () => {
+                                    console.log(this.state.value)
+                                })
+                            }
+                        }
                     }
                 })
             }
         })
     }
+    
     componentWillMount() {
         this.data()
-
+       
     }
 
     render() {
@@ -41,7 +87,6 @@ class MyVerticallyCenteredModal2 extends React.Component {
                         this.props.gotoMain()
                     }
                 }}
-                size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
             >
@@ -51,18 +96,33 @@ class MyVerticallyCenteredModal2 extends React.Component {
           </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <div className="input-group mb-3 " >
-                        <div className="input-group-prepend ">
+                    <div className="input-group row-fluid " >
+                        {/* <div className="input-group-prepend ">
                             <span className="input-group-text font" >Shop Name</span>
                         </div>
-                        <input type="text" list="Sname" className="form-control" id="shopname" onChange={(ev) => this.props.getValue(ev)} required />
-                        <datalist id="Sname">
-                            {this.state.data ?
-                                this.state.data.map((value, index) => {
-                                    return <option value={value} key={index} />
-                                }) : null
-                            }
-                        </datalist>
+                        <input type="text" list="Sname" className="form-control" id="shopname" onChange={(ev) => this.props.getValue(ev)} required /> */}
+
+                        <Select
+                            className="selectinput"
+                            onFocus = {()=>{this.setState({
+                                isSearchable : true
+                            })}}
+                            onChange={(ev) => (this.props.getValue(ev))}
+                            options={this.state.value ? this.state.value : ""}
+                            // defaultValue = {this.props.selectedShopname}
+                            // inputValue={this.props.selectedShopname}
+                            // value = {this.props.selectedShopname}
+                            // isSearchable = {true}
+                            // isClearable={true}
+                            isSearchable = {this.state.isSearchable}
+                            isClearable = {true}
+                            style={{ "width": "90%" }}
+                            // isLoading = {true}
+                        />
+
+                        {/* </Select> */}
+                        {/* <datalist id="Sname">
+                        </datalist> */}
                         <span className="input-group-text" id="name" onClick={() => {
                             this.props.handleShow()
                             document.getElementById('shopname').value = ""

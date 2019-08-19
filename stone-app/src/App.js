@@ -338,8 +338,8 @@ class Form extends React.Component {
       this.setState({
         printModaL: false,
         print: false,
-        form : false,
-        mainPage : true,
+        form: false,
+        mainPage: true,
         enteries: []
       })
     }
@@ -487,10 +487,19 @@ class Form extends React.Component {
 
   }
   getValue = (ev) => {
-    console.log()
-    this.setState({
-      selectedShopname: ev.target.value
-    })
+    console.log(ev)
+    if (ev !== null) {
+      if(ev.value !== null){
+
+        this.setState({
+          selectedShopname: ev.value
+        })
+      }
+    }else{
+      this.setState({
+        selectedShopname: ""
+      })
+    }
   }
   changePage = () => {
     this.setState({
@@ -615,7 +624,7 @@ class Form extends React.Component {
     this.setState({
       SignIn: true,
       signup: false,
-      mainPage : false
+      mainPage: false
     })
 
   }
@@ -648,6 +657,12 @@ class Form extends React.Component {
     });
   }
 
+  clearEntries = () => {
+    this.setState({
+      enteries: [],
+      print: false
+    })
+  }
   render() {
     console.log(this.props, this.state)
     return (
@@ -666,7 +681,7 @@ class Form extends React.Component {
           this.state.signup ?
             <Signup
               SignIN={this.gotoSignIn}
-              signOut = {this.signOut}
+              signOut={this.signOut}
             />
             : null
         }
@@ -677,7 +692,7 @@ class Form extends React.Component {
               gotoEntry={this.gotoEntry}
               edit={this.edit}
               delete={this.delete}
-              print = {this.printElem}
+              print={this.printElem}
             />
             : null
         }
@@ -706,6 +721,7 @@ class Form extends React.Component {
               handleClose={this.handleClose5}
               data={this.state.enteries}
               selectedShopname={this.state.selectedShopname}
+              clearEntries={this.clearEntries}
 
             />
             : null
@@ -732,7 +748,7 @@ class Form extends React.Component {
           this.state.table ?
             <div id="table">
               <div id="searchTr">
-                <InputGroup className="mb-3">
+                <InputGroup>
                   <FormControl
                     aria-label="Recipient's username"
                     aria-describedby="basic-addon2"
@@ -793,7 +809,7 @@ class Form extends React.Component {
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Recipt no</th>
+                    <th scope="col">Entry no</th>
                     <th scope="col">Date</th>
                     <th scope="col">stone</th>
                     <th scope="col">Weigth</th>

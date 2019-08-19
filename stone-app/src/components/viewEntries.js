@@ -10,7 +10,7 @@ class ViewEntires extends Component {
                     <thead>
                         <tr>
                             <th>S no</th>
-                            <th>recipt no</th>
+                            <th>Entry no</th>
                             <th>Date</th>
                             <th>Stone</th>
                             <th>per CT</th>

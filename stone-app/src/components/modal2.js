@@ -40,7 +40,7 @@ class Example2 extends React.Component {
 
         var year = fulldate.getFullYear();
         console.log(date, month, year)
-        var merge = `${date}${month}${year}`
+        var merge = `${date}/${month}/${year}`
         return merge
     }
 
@@ -99,7 +99,7 @@ class Example2 extends React.Component {
                                 <InputGroup.Text id="inputGroup-sizing-default">Date</InputGroup.Text>
                             </InputGroup.Prepend>
                             <FormControl
-                                type="number"
+                                
                                 id="dateInp"
                                 aria-label="Default"
                                 aria-describedby="inputGroup-sizing-default"

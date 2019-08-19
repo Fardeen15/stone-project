@@ -19,13 +19,13 @@ class Example extends React.Component {
         console.log(ev.target.value)
     }
     setName = () => {
-        console.log(this.state.value,"62164564564")
+        console.log(this.state.value, "62164564564")
         auth.onAuthStateChanged((user) => {
-            if (user && this.state.value ) {
+            if (user && this.state.value) {
 
-                db.ref().child(user.uid).child('shopNames').child(this.state.value).set(this.state.value).then(()=>{
+                db.ref().child(user.uid).child('shopNames').child(this.state.value).set(this.state.value).then(() => {
                     this.setState({
-                        value : ""
+                        value: ""
                     })
                 })
             }
@@ -34,7 +34,11 @@ class Example extends React.Component {
     render() {
         return (
             <>
-                <Modal show={this.props.show} onHide={this.props.handleClose}>
+                <Modal
+                size = "sm"
+                    show={this.props.show}
+                    onHide={this.props.handleClose}
+                >
                     <Modal.Header closeButton>
                         <Modal.Title>Add Shop Name</Modal.Title>
                     </Modal.Header>
@@ -46,7 +50,7 @@ class Example extends React.Component {
                             <FormControl
                                 id="name"
                                 aria-label="Default"
-                                aria-describedby="inputGroup-sizing-default"
+                                // aria-describedby="inputGroup-sizing-default"
                                 onChange={(ev) => this.name(ev)}
                             />
                         </InputGroup>
@@ -58,7 +62,7 @@ class Example extends React.Component {
                         <Button variant="primary" onClick={() => {
                             this.setName()
                             this.props.handleClose()
-                            
+
                         }}>Save Changes</Button>
                     </Modal.Footer>
                 </Modal>

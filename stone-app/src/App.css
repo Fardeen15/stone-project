@@ -4,10 +4,20 @@ background: linear-gradient(to right,  #8d8a8a 0%,#ddd5d5 100%);
     height: 100vh;
     overflow: scroll;
 }
+#table::-webkit-scrollbar {
+  width: 0%;
+}
+#table1::-webkit-scrollbar {
+  width: 0%;
+}
+#root::-webkit-scrollbar {
+  width: 0%;
+}
+
 .Form{
   width: 50%;
   /* background: linear-gradient(to right,  #808080 0%,#e6e6e6 100%);   */
-  height: 65vh;
+  /* height: 100vh; */
   position: absolute;
   top: 50%;
   left: 50%;
@@ -17,8 +27,8 @@ background: linear-gradient(to right,  #8d8a8a 0%,#ddd5d5 100%);
 .select{
   width: 70%;
   left: 50%;
-  top: 10%;
-  transform: translate(-50%, -50%);
+  /* top: 10%; */
+  transform: translate(-50%, 0%);
   position: relative;
 }
 .Totalprice{
@@ -35,16 +45,20 @@ background: linear-gradient(to right,  #8d8a8a 0%,#ddd5d5 100%);
 h1{
   text-align: center;
   padding: 19px;
-  padding-top: 64px;
+  padding-top: 20px;
 }
 .font {
   font-size: 11px !important;
+}
+.selectinput {
+width: 90% !important;
 }
 #table{
   /* display: none; */
   z-index: 1;
   height: 100vh;
   width: 100%;
+  overflow: scroll;
   background-color: rgba(0,0,0,0.3);
 }
 #table1{

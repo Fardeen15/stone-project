@@ -31,8 +31,8 @@ class Print extends Component {
             for (var i = 0; i < data.length; i++) {
                 if (user && data) {
                     console.log(user.uid)
-                    db.ref().child(user.uid).child('data').child(data[i].shopname).child(data[i].date).set(data[i]).then(()=>{
-                        console.log("succesful",user.uid)
+                    db.ref().child(user.uid).child('data').child(data[i].shopname).child(data[i].date).set(data[i]).then(() => {
+                        console.log("succesful", user.uid)
                         data = ""
                     })
                 }
@@ -69,13 +69,14 @@ class Print extends Component {
         console.log(this.props.data)
         return (
             <Modal
+                size="lg"
+                aria-labelledby="example-modal-sizes-title-lg"
                 show={this.props.show}
-                onHide={this.props.handleClose}
-                dialogClassName="modal-90w"
-                aria-labelledby="example-custom-modal-styling-title"
+                onHide={this.props.clearEntries}
+                
             >
-                <Modal.Header closeButton>
-                    <Modal.Title id="example-custom-modal-styling-title">
+                <Modal.Header closeButton id="example-custom-modal-styling-title">
+                    <Modal.Title >
                         Print preview
                     </Modal.Title>
                 </Modal.Header>
@@ -90,7 +91,7 @@ class Print extends Component {
                                 <thead className="thead-dark">
                                     <tr>
                                         <th>S no</th>
-                                        <th>recipt no</th>
+                                        <th>Entry no</th>
                                         <th>Date</th>
                                         <th>Stone</th>
                                         <th>per CT</th>

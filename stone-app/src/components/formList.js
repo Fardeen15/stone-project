@@ -33,14 +33,7 @@ class FormList extends React.Component {
   render() {
     return (
       <div className="Form" id="form">
-        {this.props.edit ?
-          <h1>Edit Form</h1>
-          :
-          <span>
-          <h1>Submit Form</h1>
-          <h3>Shopname : ({this.props.shopname})</h3>
-          </span>
-        }
+        
         <div id="addbtn2">
           <button type="button" className="btn btn-secondary btn-circle2 btn-xl2" onClick={() => {
             if (!this.props.edit) {
@@ -51,6 +44,14 @@ class FormList extends React.Component {
           }}><i className="fas fa-arrow-left addicon"></i>
           </button>
         </div>
+        {this.props.edit ?
+          <h1>Edit Form</h1>
+          :
+          <span>
+          <h1>Submit Form</h1>
+          <h3 style = {{"marginBottom" : "13px"}}>Shopname : ({this.props.shopname})</h3>
+          </span>
+        }
         <div className="input-group mb-3 select">
           <div className="input-group-prepend">
             <label className="input-group-text select1">stones</label>

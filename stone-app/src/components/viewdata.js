@@ -17,9 +17,14 @@ class List extends React.Component {
             // this.props.value ?
             <tbody>
                 {!this.props.value.stone && !this.props.value.balance ?
-                    <tr>
-                        <td colSpan="3">{this.props.value.date}</td>
-                        <td colSpan="4">{this.props.value.totalprice} (previous balance)</td>
+                    <tr>    
+                        <td>{this.props.index + 1}</td>
+                        <td>-</td>
+                        <td>{this.props.value.date}</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td colSpan = "2">{this.props.value.totalprice} (previous balance)</td>
                     </tr>
                     : null}
                     {this.props.value.stone ?
@@ -36,21 +41,24 @@ class List extends React.Component {
                     : this.props.value.balance ?
                         <tr>
                             <td>{this.props.index + 1}</td>
+                            <td>-</td>
                             <td>{this.props.value.date}</td>
-                            <td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            {/* <td>
                                 {this.props.value.total}
                                 (total)
-                            </td>
-                            <td>
+                            </td> */}
+                            <td colSpan = "2">
                                 {this.props.value.totalprice}
-                                (received)
+                                (cash received)
                              </td>
-                            <td>
+                             {/* <td></td> */}
+                            {/* <td>
                                 {this.props.value.balance}
                                 (balance)
-                            </td>
-                            <td></td>
-                            <td></td>
+                            </td> */}
                         </tr>
                         : null}
             </tbody>
