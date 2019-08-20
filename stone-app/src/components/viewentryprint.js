@@ -3,7 +3,7 @@ import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import { db, auth } from '../firebaseconfig';
 import '../App.css'
-class Print extends Component {
+class Print2 extends Component {
     date2 = () => {
         var fulldate = new Date()
         var date = fulldate.getDate();
@@ -121,27 +121,11 @@ class Print extends Component {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button  style = {
-                        {
-                            "fontSize" : ".8em"
-                        }} variant="danger" onClick={() => {
-                        this.props.handleClose("addmore")
-                    }}>Add More Item</Button>
-                    <Button  style = {
-                        {
-                            "fontSize" : ".8em"
-                        }} variant="primary" onClick={() => {
+                    <Button variant="primary" onClick={() => {
                         this.setData()
                         this.props.handleClose("print")
                         this.printElem()
                     }}>Print & Save </Button>
-                    <Button style = {
-                        {
-                            "fontSize" : ".8em"
-                        }} variant="secondary" onClick={() => {
-                        this.setData()
-                        this.props.handleClose("print")
-                    }}> Save </Button>
                 </Modal.Footer>
             </Modal>
 
@@ -149,4 +133,4 @@ class Print extends Component {
         )
     }
 }
-export default Print 
+export default Print2 

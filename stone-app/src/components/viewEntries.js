@@ -16,11 +16,17 @@ class ViewEntires extends Component {
                             <th>per CT</th>
                             <th>Weigth</th>
                             <th>total price</th>
-                            <th><button type="button" className="btn btn-secondary" onClick={() => {
+                            <th><button style = {
+                        {
+                            "fontSize" : ".9em"
+                        }} type="button" className="btn btn-secondary" onClick={() => {
                                 this.props.gotoEntry()
                             }}>Back</button></th>
-                            <th><button type="button" className="btn btn-primary" onClick={() => {
-                                this.props.print()
+                            <th><button style = {
+                        {
+                            "fontSize" : ".9em"
+                        }} type="button" className="btn btn-primary" onClick={() => {
+                                this.props.print("print2")
                             }}>print</button></th>
                         </tr>
                     </thead>

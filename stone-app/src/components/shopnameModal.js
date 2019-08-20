@@ -5,28 +5,6 @@ import { db, auth } from '../firebaseconfig';
 import Select from 'react-select'
 
 
-const option = [
-    { value: "st", label: "st" },
-    { value: "ruby", label: "ruby" },
-    { value: "star", label: "star" },
-    // {value : "st" , label : "st"},
-]
-var obj = [];
-// console.log(this.state.data)
-// if (this.state.data) {
-
-//     this.state.data.map((value, index) => {
-//         return obj.push({ value: value, label: value })
-//     })
-//     if (obj !== []) {
-
-//         this.setState({
-//             value: obj
-//         }, () => {
-//             console.log(this.state.value)
-//         })
-//     }
-// }
 
 class MyVerticallyCenteredModal2 extends React.Component {
     constructor() {
@@ -83,8 +61,10 @@ class MyVerticallyCenteredModal2 extends React.Component {
                 show={this.props.show} onHide={() => {
                     if (this.props.selectedShopname) {
                         this.props.handleClose()
+                        console.log(true,this.props.selectedShopname)
                     } else {
                         this.props.gotoMain()
+                        console.log(false,this.props.selectedShopname)
                     }
                 }}
                 aria-labelledby="contained-modal-title-vcenter"
@@ -112,7 +92,7 @@ class MyVerticallyCenteredModal2 extends React.Component {
                             isSearchable = {this.state.isSearchable}
                             isClearable = {true}
                             isDisabled = {this.state.value ? false : true}
-                            style={{ "width": "90%" }}
+                            style={{ "width": "50%" }}
                         />
 
                         {/* </Select> */}
@@ -126,7 +106,7 @@ class MyVerticallyCenteredModal2 extends React.Component {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button disabled={!this.props.selectedShopname} variant='secondary' name={this.props.shopname} onClick={(ev) => {
+                    <Button disabled={this.props.selectedShopname ? false : true} variant='secondary' name={this.props.shopname} onClick={(ev) => {
                         this.props.handleClose(ev)
                     }}>Go...</Button>
                 </Modal.Footer>

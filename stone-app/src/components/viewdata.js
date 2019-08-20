@@ -21,10 +21,10 @@ class List extends React.Component {
                         <td>{this.props.index + 1}</td>
                         <td>-</td>
                         <td>{this.props.value.date}</td>
+                        <td>(previous balance)</td>
                         <td>-</td>
                         <td>-</td>
-                        <td>-</td>
-                        <td colSpan = "2">{this.props.value.totalprice} (previous balance)</td>
+                        <td colSpan = "2">{this.props.value.totalprice} </td>
                     </tr>
                     : null}
                     {this.props.value.stone ?
@@ -43,22 +43,15 @@ class List extends React.Component {
                             <td>{this.props.index + 1}</td>
                             <td>-</td>
                             <td>{this.props.value.date}</td>
+                            <td>(cash received)</td>
                             <td>-</td>
                             <td>-</td>
-                            <td>-</td>
-                            {/* <td>
-                                {this.props.value.total}
-                                (total)
-                            </td> */}
+                           
                             <td colSpan = "2">
                                 {this.props.value.totalprice}
-                                (cash received)
+                                
                              </td>
-                             {/* <td></td> */}
-                            {/* <td>
-                                {this.props.value.balance}
-                                (balance)
-                            </td> */}
+                             
                         </tr>
                         : null}
             </tbody>

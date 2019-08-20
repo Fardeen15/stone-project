@@ -97,14 +97,14 @@ class FormList extends React.Component {
             "top": "11%"
           }}>
             <div className="input-group mb-3 select" >
-              <button type="button" className="btn btn-secondary" id="submit" onClick={() => {
+              <button type="button" className="btn btn-secondary" id="customer" onClick={() => {
                 this.props.sumbit()
                 this.props.handleShow3()
               }
               }>submit</button>
             </div>
             <div className="input-group mb-3 select" >
-              {/* <div id="addbtn2" className="btn btn-danger btn-circle3 btn-xl3">
+              {/* <div id="addbtn2" className="btn btn-secondary btn-circle3 btn-xl3">
             <h1>1</h1>
           </div> */}
 
@@ -114,15 +114,15 @@ class FormList extends React.Component {
                 View Entires
         </button>
             </div>
-            {/* {this.props.entries.length ?
+            {this.props.entries.length ?
               <div className="input-group mb-3 select" >
                 <button type="button" className="btn btn-secondary" id="customer" onClick={() => {
                   this.props.print()
                 }}>
-                  Print
+                  clear all entries
         </button>
               </div>
-              : null} */}
+              : null}
           </div>
           : <div className="input-group mb-3 select" >
             <button type="button" className="btn btn-secondary" id="customer" onClick={() => this.props.update()} >

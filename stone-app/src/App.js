@@ -19,6 +19,7 @@ import ViewEntires from './components/viewEntries';
 import { auth } from './firebaseconfig';
 import Signup from './components/signup';
 import SignIN from './components/signIn';
+import Print2 from './components/viewentryprint';
 class Form extends React.Component {
   constructor() {
     super()
@@ -53,6 +54,7 @@ class Form extends React.Component {
       signup: false,
       editIndex: "",
       editdata: "",
+      print2: false,
       localgetDataKeys: "seeven star",
       localGetData: [
         {
@@ -158,7 +160,7 @@ class Form extends React.Component {
       document.getElementById('weigth').value = ""
       document.getElementById('karatprice').value = ""
       document.getElementById('Totalprice').value = ""
-    }else{
+    } else {
       alert('please filled all fields')
     }
   }
@@ -349,6 +351,17 @@ class Form extends React.Component {
       })
     }
   }
+  handleClose6 = (addmore) => {
+    this.setState({
+      printModaL: false,
+      print2: false,
+      enteries : [],
+      viewentry : false,
+      mainPage : true,
+      selectedShopname : ""
+    })
+  }
+
   handleShow5 = (ev) => {
     this.setState({
       printModaL: true,
@@ -520,7 +533,7 @@ class Form extends React.Component {
       form: false,
       ShopnameModal: false,
       enteries: [],
-      selectedShopname: true,
+      selectedShopname: "",
       mainPage: true
     })
   }
@@ -536,10 +549,17 @@ class Form extends React.Component {
       viewentry: false
     })
   }
-  printElem = () => {
-    this.setState({
-      print: true
-    })
+  printElem = (print) => {
+    if (print === "print2") {
+      this.setState({
+        print2: true
+      })
+    } else {
+
+      this.setState({
+        print: true
+      })
+    }
   }
   edit = (ev, index) => {
     var data = ev[index]
@@ -733,6 +753,18 @@ class Form extends React.Component {
             : null
         }
         {
+          this.state.print2 ?
+            <Print2
+              show={this.state.print2}
+              handleClose={this.handleClose6}
+              data={this.state.enteries}
+              selectedShopname={this.state.selectedShopname}
+              clearEntries={this.clearEntries}
+
+            />
+            : null
+        }
+        {
           this.state.form ?
             <FormList
               totalprice={this.totalprice}
@@ -742,7 +774,7 @@ class Form extends React.Component {
               entries={this.state.enteries}
               gotoMain={this.gotoMain}
               viewentry={this.viewentry}
-              print={this.printElem}
+              print={this.clearEntries}
               edit={this.state.edit}
               gotoViewEntry={this.gotoViewEntry}
               update={this.update}
@@ -767,17 +799,16 @@ class Form extends React.Component {
                 </InputGroup>
 
               </div>
-              <table className="table table-striped table-dark" style={
-                {
-                  "padding": ".55em"
-                }
-              }>
+              <table className="table table-striped table-dark" >
                 <thead>
-                  <tr id="headTr">
-                    <th scope="col" >#</th>
+                  <tr  id="headTr">
+                    <th  scope="col" >#</th>
                     <th scope="col">Shop Name</th>
                     <th scope="col">
-                      <button className="btn btn-danger" onClick={() => {
+                      <button style = {
+                        {
+                            "fontSize" : ".8em"
+                        }} className="btn btn-danger" onClick={() => {
                         this.setState({
                           mainPage: true,
                           table: false
@@ -821,7 +852,7 @@ class Form extends React.Component {
                     <th scope="col">#</th>
                     <th scope="col">Entry no</th>
                     <th scope="col">Date</th>
-                    <th scope="col">stone</th>
+                    <th scope="col">Description</th>
                     <th scope="col">Weigth</th>
                     <th scope="col">Per ct rate</th>
                     <th scope="col">Total price</th>
