@@ -69,6 +69,7 @@ class MyVerticallyCenteredModal extends React.Component {
         if (this.totalprice()) {
             var obj = {
                 balance: {
+                    // newdate : this.date2(),
                     totalprice: this.totalprice(),
                     date: this.date()
                 }

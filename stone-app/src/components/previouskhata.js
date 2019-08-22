@@ -1,21 +1,16 @@
 import React from 'react';
-import { db, auth } from '../firebaseconfig';
 
-class List extends React.Component {
+class PreviousKhata extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             data: null
         }
-    }
-    componentWillMount() {
-        this.props.total()
-        console.log(this.props.khata)
-    }
-    
+    }    
     render() {
-        return (
-            // this.props.value ?
+        console.log(this.props.value)
+        return(
+            // <h1>hwllo</h1>
             <tbody>
                 {!this.props.value.stone && !this.props.value.balance ?
                     <tr>    
@@ -26,7 +21,7 @@ class List extends React.Component {
                         <td>-</td>
                         <td>-</td>
                         <td>{this.props.value.totalprice} </td>
-                        <td><button className="btn btn-secondary" name = {this.props.value.date} onClick = {(ev)=>this.props.khata(ev)}>previous Khata</button></td>
+                        <td></td>
                     </tr>
                     : null}
                     {this.props.value.stone ?
@@ -60,10 +55,9 @@ class List extends React.Component {
                         </tr>
                         : null}
             </tbody>
-            // :null
 
 
         )
     }
 }
-export default List
+export default PreviousKhata

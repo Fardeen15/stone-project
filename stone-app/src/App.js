@@ -20,6 +20,7 @@ import { auth } from './firebaseconfig';
 import Signup from './components/signup';
 import SignIN from './components/signIn';
 import Print2 from './components/viewentryprint';
+import PreviousKhata from './components/previouskhata';
 class Form extends React.Component {
   constructor() {
     super()
@@ -28,6 +29,7 @@ class Form extends React.Component {
       getdata: [],
       dataList: [],
       getDataKeys: [],
+      previouskhata: [],
       modal: false,
       modal2: false,
       modal3: false,
@@ -55,6 +57,7 @@ class Form extends React.Component {
       editIndex: "",
       editdata: "",
       print2: false,
+      khata: false,
       localgetDataKeys: "seeven star",
       localGetData: [
         {
@@ -355,10 +358,10 @@ class Form extends React.Component {
     this.setState({
       printModaL: false,
       print2: false,
-      enteries : [],
-      viewentry : false,
-      mainPage : true,
-      selectedShopname : ""
+      enteries: [],
+      viewentry: false,
+      mainPage: true,
+      selectedShopname: ""
     })
   }
 
@@ -689,6 +692,37 @@ class Form extends React.Component {
       print: false
     })
   }
+  khata = (ev) => {
+    var name = ev.target.name
+    console.log(name)
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        db.ref().child(user.uid).child('khata').child(this.state.shopname).on('value', (snap) => {
+          var data = Object.values(snap.val())
+          for (var i = 0; i < data.length; i++) {
+            for (var j = 0; j < data[i].length; j++) {
+              if (data[i][j]) {
+
+                if (data[i][j].date === name) {
+                  this.setState({
+                    khata: true,
+                    table1: false,
+                    previouskhata: data[i]
+                  })
+                }
+              }
+            }
+          }
+        })
+      }
+    })
+  }
+  tablechange2 = () => {
+    this.setState({
+      khata : false,
+      table1 : true
+    })
+  }
   render() {
     console.log(this.props, this.state)
     return (
@@ -753,6 +787,35 @@ class Form extends React.Component {
             : null
         }
         {
+          this.state.khata ?
+            <div id="table">
+              <table className="table">
+                <thead className="thead-light">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Entry no</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Weigth</th>
+                    <th scope="col">Per ct rate</th>
+                    <th scope="col">Total price</th>
+                    <th scope="col"><button type="button" className="btn btn-danger" onClick={this.tablechange2}>Back</button></th>
+                  </tr>
+                </thead>
+                {this.state.previouskhata ?
+                  this.state.previouskhata.map((values, index) => {
+                    return values ? <PreviousKhata
+                      key={index}
+                      index={index}
+                      value={values}
+                      khata={this.khata}
+                    /> : null
+                  })
+                  : null}
+              </table>
+            </div>
+            : null}
+        {
           this.state.print2 ?
             <Print2
               show={this.state.print2}
@@ -801,19 +864,19 @@ class Form extends React.Component {
               </div>
               <table className="table table-striped table-dark" >
                 <thead>
-                  <tr  id="headTr">
-                    <th  scope="col" >#</th>
+                  <tr id="headTr">
+                    <th scope="col" >#</th>
                     <th scope="col">Shop Name</th>
                     <th scope="col">
-                      <button style = {
+                      <button style={
                         {
-                            "fontSize" : ".8em"
+                          "fontSize": ".8em"
                         }} className="btn btn-danger" onClick={() => {
-                        this.setState({
-                          mainPage: true,
-                          table: false
-                        })
-                      }}>Back to mainPage</button>
+                          this.setState({
+                            mainPage: true,
+                            table: false
+                          })
+                        }}>Back to mainPage</button>
                     </th>
                   </tr>
                 </thead>
@@ -867,8 +930,10 @@ class Form extends React.Component {
                       index={index}
                       data={this.state.baldata ? this.state.baldata : null}
                       total={this.value}
+                      shopname={this.state.shopname}
                       handleShow={this.handleShow}
                       data2={this.data2}
+                      khata={this.khata}
                     /> : null
 
                   }) : this.state.localGetData ?

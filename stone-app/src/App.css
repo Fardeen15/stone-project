@@ -124,6 +124,9 @@ i{
   /* background: linear-gradient(to right,  #808080 0%,#e6e6e6 100%);   */
 
 }
+.black td{
+  color: black;
+}
 #mainDiv div{
   height: 15vh;
     width: 50%;

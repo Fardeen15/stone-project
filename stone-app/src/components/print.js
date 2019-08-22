@@ -84,8 +84,14 @@ class Print extends Component {
                     <div id="printDiv">
                         <div>
 
-                            <h3>Shopname</h3>
-                            <h5>({this.props.data[0].shopname})</h5>
+                            <h3 style = {
+                        {
+                            "color" : "black"
+                        }}>Shopname</h3>
+                            <h5 style = {
+                        {
+                            "color" : "black"
+                        }}>({this.props.data[0].shopname})</h5>
 
                             <table className="table">
                                 <thead className="thead-dark">
@@ -99,11 +105,11 @@ class Print extends Component {
                                         <th>total price</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody >
                                     {this.props.data ?
                                         this.props.data.map((value, index) => {
                                             return (
-                                                <tr key={index}>
+                                                <tr className= "black" key={index}>
                                                     <td>{index + 1}</td>
                                                     <td>{value.date}</td>
                                                     <td>{value.newDate}</td>

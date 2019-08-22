@@ -14,8 +14,10 @@ class Example2 extends React.Component {
     }
     total = () => {
         var value1 = document.getElementById('totalprice').value
+        var discount = document.getElementById('discount').value;
         var value2 = document.getElementById('cashpayment').value
         var balnce = value1 - value2
+        balnce = balnce - discount
         // if (balnce >= 0) {
         this.setState({
             balance: balnce
@@ -69,13 +71,15 @@ class Example2 extends React.Component {
     price = () => {
         var date = document.getElementById('dateInp').value;
         var total = document.getElementById('totalprice').value;
-        var cashpayment = document.getElementById('cashpayment').value;
+        var discount = document.getElementById('discount').value;
+        var cashpayment = Number(document.getElementById('cashpayment').value) + Number(discount);
         console.log(date, total, cashpayment)
         var obj = {
             date: date,
             total: total,
+            discount : discount,
             totalprice: -cashpayment,
-            balance: this.state.balance,
+            balance: this.state.balance ,
         }
         return obj
     }
@@ -120,6 +124,7 @@ class Example2 extends React.Component {
                                 disabled
                             />
                         </InputGroup>
+                        
                         <InputGroup className="mb-3">
                             <InputGroup.Prepend>
                                 <InputGroup.Text id="inputGroup-sizing-default">Cash payment</InputGroup.Text>
@@ -127,6 +132,20 @@ class Example2 extends React.Component {
                             <FormControl
                                 type="number"
                                 id="cashpayment"
+                                aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default"
+                                onChange={() => {
+                                    this.total()
+                                }}
+                            />
+                        </InputGroup>
+                        <InputGroup className="mb-3">
+                            <InputGroup.Prepend>
+                                <InputGroup.Text id="inputGroup-sizing-default">discount</InputGroup.Text>
+                            </InputGroup.Prepend>
+                            <FormControl
+                                type="number"
+                                id="discount"
                                 aria-label="Default"
                                 aria-describedby="inputGroup-sizing-default"
                                 onChange={() => {
