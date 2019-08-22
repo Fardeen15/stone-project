@@ -72,7 +72,7 @@ class Print extends Component {
                 size="lg"
                 aria-labelledby="example-modal-sizes-title-lg"
                 show={this.props.show}
-                onHide={this.props.clearEntries}
+                onHide={()=>this.props.handleClose("addmore")}
                 
             >
                 <Modal.Header closeButton id="example-custom-modal-styling-title">
@@ -109,7 +109,7 @@ class Print extends Component {
                                                     <td>{value.newDate}</td>
                                                     <td>{value.stone}</td>
                                                     <td>{value.perkarat}</td>
-                                                    <td>{value.weigth}</td>
+                                                    <td>{value.weigth}CT</td>
                                                     <td>{value.totalprice}</td>
                                                 </tr>
                                             )
@@ -129,6 +129,10 @@ class Print extends Component {
                         this.props.handleClose("print")
                         this.printElem()
                     }}>Print & Save </Button>
+                    <Button variant="secondary" onClick={() => {
+                        this.setData()
+                        this.props.handleClose("print")
+                    }}> Save </Button>
                 </Modal.Footer>
             </Modal>
 

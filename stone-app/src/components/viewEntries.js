@@ -34,7 +34,7 @@ class ViewEntires extends Component {
                                         <td>{value.newDate}</td>
                                         <td>{value.stone}</td>
                                         <td>{value.perkarat}</td>
-                                        <td>{value.weigth}</td>
+                                        <td>{value.weigth}CT</td>
                                         <td>{value.totalprice}</td>
                                         <td>
                                             <i className="far fa-edit icon" onClick={(ev) => {

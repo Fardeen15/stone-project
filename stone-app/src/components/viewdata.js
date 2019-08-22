@@ -33,7 +33,7 @@ class List extends React.Component {
                         <td>{this.props.value.date}</td>
                         <td>{this.props.value.newDate}</td>
                         <td>{this.props.value.stone}</td>
-                        <td>{this.props.value.weigth}</td>
+                        <td>{this.props.value.weigth}CT</td>
                         <td>{this.props.value.perkarat}</td>
                         <td>{this.props.value.totalprice}</td>
                         <td></td>

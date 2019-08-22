@@ -109,7 +109,7 @@ class Form extends React.Component {
     var shopname = this.state.selectedShopname;
     var stone = document.getElementById('stone').value;
     var weigth1 = document.getElementById('weigth').value;
-    var weigth = weigth1 + document.getElementById('karat').innerHTML
+    // var weigth = weigth1 + document.getElementById('karat').innerHTML
     var karatprice = document.getElementById('karatprice').value;
     var Totalprice = document.getElementById('Totalprice').value;
     var fulldate = new Date()
@@ -131,31 +131,36 @@ class Form extends React.Component {
     var time = `${fulldate.getMinutes()}${fulldate.getHours()}`
     var newDate = `${date}${month}${year}${time}${miliscnd}`
     var date = `${date}/${month}/${year}`
-    var obj = {
-      date: newDate,
-      newDate: date,
-      shopname: shopname,
-      stone: stone,
-      weigth: weigth,
-      perkarat: karatprice,
-      totalprice: Totalprice
+    if (stone && weigth1 && karatprice && Totalprice) {
+
+      var obj = {
+        date: newDate,
+        newDate: date,
+        shopname: shopname,
+        stone: stone,
+        weigth: weigth1,
+        perkarat: karatprice,
+        totalprice: Totalprice
+      }
+      var enteries = this.state.enteries;
+      enteries.push(obj);
+      this.setState({
+        enteries: enteries,
+        print: true
+      })
+      console.log(enteries)
+      if (this.state.print) {
+        console.log(true)
+      }
+      // db.ref().child('data').child(shopname).child(newDate).set(obj)
+      // document.getElementById('shopname').value = ""
+      document.getElementById('stone').value = ""
+      document.getElementById('weigth').value = ""
+      document.getElementById('karatprice').value = ""
+      document.getElementById('Totalprice').value = ""
+    }else{
+      alert('please filled all fields')
     }
-    var enteries = this.state.enteries;
-    enteries.push(obj);
-    this.setState({
-      enteries: enteries,
-      print: true
-    })
-    console.log(enteries)
-    if (this.state.print) {
-      console.log(true)
-    }
-    // db.ref().child('data').child(shopname).child(newDate).set(obj)
-    // document.getElementById('shopname').value = ""
-    document.getElementById('stone').value = ""
-    document.getElementById('weigth').value = ""
-    document.getElementById('karatprice').value = ""
-    document.getElementById('Totalprice').value = ""
   }
 
   viewList = (ev) => {
@@ -489,13 +494,13 @@ class Form extends React.Component {
   getValue = (ev) => {
     console.log(ev)
     if (ev !== null) {
-      if(ev.value !== null){
+      if (ev.value !== null) {
 
         this.setState({
           selectedShopname: ev.value
         })
       }
-    }else{
+    } else {
       this.setState({
         selectedShopname: ""
       })
@@ -515,6 +520,7 @@ class Form extends React.Component {
       form: false,
       ShopnameModal: false,
       enteries: [],
+      selectedShopname: true,
       mainPage: true
     })
   }
@@ -545,8 +551,8 @@ class Form extends React.Component {
       editdata: data
     })
     var weight = data.weigth
-    weight = weight.slice(0, -2)
-    weight = parseInt(weight)
+    // weight = weight.slice(0, -2)
+    // weight = parseInt(weight)
     setTimeout(() => {
       document.getElementById('stone').value = data.stone
       document.getElementById('weigth').value = weight
@@ -559,7 +565,7 @@ class Form extends React.Component {
     var data = this.state.editdata;
     var stone = document.getElementById('stone').value;
     var weigth1 = document.getElementById('weigth').value;
-    var weigth = weigth1 + document.getElementById('karat').innerHTML
+    // var weigth = weigth1 + document.getElementById('karat').innerHTML
     var karatprice = document.getElementById('karatprice').value;
     var Totalprice = document.getElementById('Totalprice').value;
     var obj = {
@@ -568,7 +574,7 @@ class Form extends React.Component {
       perkarat: karatprice,
       shopname: data.shopname,
       stone: stone,
-      weigth: weigth,
+      weigth: weigth1,
       totalprice: Totalprice
     }
     var enteries = this.state.enteries
@@ -761,7 +767,11 @@ class Form extends React.Component {
                 </InputGroup>
 
               </div>
-              <table className="table table-striped table-dark">
+              <table className="table table-striped table-dark" style={
+                {
+                  "padding": ".55em"
+                }
+              }>
                 <thead>
                   <tr id="headTr">
                     <th scope="col" >#</th>

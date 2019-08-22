@@ -56,7 +56,7 @@ class FormList extends React.Component {
           <div className="input-group-prepend">
             <label className="input-group-text select1">stones</label>
           </div>
-          <select className="custom-select" id="stone">
+          <select required className="custom-select" id="stone">
             <option>Choose...</option>
             {this.state.stone ?
               this.state.stone.map((value, index) => {
@@ -75,7 +75,7 @@ class FormList extends React.Component {
           <div className="input-group-prepend">
             <span className="input-group-text select1" >Weigth</span>
           </div>
-          <input type="number" className="form-control" id="weigth" onChange={this.props.totalprice} />
+          <input type="number" className="form-control" id="weigth" onChange={this.props.totalprice} required/>
           <span className="input-group-text" id="karat">CT</span>
 
         </div>
@@ -83,7 +83,7 @@ class FormList extends React.Component {
           <div className="input-group-prepend">
             <span className="input-group-text select1 font" >per CT price</span>
           </div>
-          <input type="number" className="form-control" id="karatprice" onChange={this.props.totalprice} />
+          <input type="number" required className="form-control" id="karatprice" onChange={this.props.totalprice} />
         </div>
         <div className="input-group mb-3 select" >
           <div className="input-group-prepend">
@@ -114,7 +114,7 @@ class FormList extends React.Component {
                 View Entires
         </button>
             </div>
-            {this.props.entries.length ?
+            {/* {this.props.entries.length ?
               <div className="input-group mb-3 select" >
                 <button type="button" className="btn btn-secondary" id="customer" onClick={() => {
                   this.props.print()
@@ -122,7 +122,7 @@ class FormList extends React.Component {
                   Print
         </button>
               </div>
-              : null}
+              : null} */}
           </div>
           : <div className="input-group mb-3 select" >
             <button type="button" className="btn btn-secondary" id="customer" onClick={() => this.props.update()} >

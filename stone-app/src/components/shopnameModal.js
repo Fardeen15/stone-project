@@ -109,15 +109,10 @@ class MyVerticallyCenteredModal2 extends React.Component {
                             })}}
                             onChange={(ev) => (this.props.getValue(ev))}
                             options={this.state.value ? this.state.value : ""}
-                            // defaultValue = {this.props.selectedShopname}
-                            // inputValue={this.props.selectedShopname}
-                            // value = {this.props.selectedShopname}
-                            // isSearchable = {true}
-                            // isClearable={true}
                             isSearchable = {this.state.isSearchable}
                             isClearable = {true}
+                            isDisabled = {this.state.value ? false : true}
                             style={{ "width": "90%" }}
-                            // isLoading = {true}
                         />
 
                         {/* </Select> */}
@@ -125,7 +120,7 @@ class MyVerticallyCenteredModal2 extends React.Component {
                         </datalist> */}
                         <span className="input-group-text" id="name" onClick={() => {
                             this.props.handleShow()
-                            document.getElementById('shopname').value = ""
+                            // document.getElementById('shopname').value = ""
                         }}><i className="fas fa-plus addicon2" ></i></span>
 
                     </div>
